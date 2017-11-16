@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <vector>
 #include "r_instruction.hpp"
+#include "i_instruction.hpp"
+#include "j_instruction.hpp"
 
 using namespace std;
 
@@ -25,8 +27,10 @@ vector<string> make_instuction_vector(string filename){
         for(int i=0; i<32; i++){
             myfile>>instuctionline[i];
         }
-        if(!myfile.eof()){
+        if(!myfile.eof()&&(instructions.size()<0x1000000)){
             instructions.push_back(instuctionline);
+        } else if(instructions.size()<0x1000000){
+            instructions.push_back("too many instructions");
         }
     }
     //stops at the end of the file
@@ -35,7 +39,7 @@ vector<string> make_instuction_vector(string filename){
     return instructions;
 }
 
-int getfunc_type(string instruction){
+char getfunc_type(string instruction){
     int opcode=0;
     for(int i=0; i<6;i++){
         if(instruction[i]=='1'){
@@ -43,9 +47,9 @@ int getfunc_type(string instruction){
         }
     }
     
-    if(opcode==0){ return 0;}
-    else if(opcode==2||opcode==3){ return 2;}
-    else{ return 1;}
+    if(opcode==0){ return 'r';}
+    else if(opcode==2||opcode==3){ return 'j';}
+    else{ return 'i';}
     
 }
 
@@ -53,28 +57,39 @@ int getfunc_type(string instruction){
 int main()
 {
     //declares the memory elements we will use
-    int data_size = 1;
     uint32_t regs[32];
     regs[1]=0x80000000;
     regs[2]=0x80000000;
-    uint32_t* data[data_size];
+    uint32_t* data = new uint32_t [0x4000000]();
     uint32_t pc=0;
+    uint32_t getc, putc, HI, LO;
     
     //converts the text file of instructions into a more managable vector of strings of instructions
-    vector<string> inst_vector;
     string filename = "textfile.txt";
-    inst_vector = make_instuction_vector(filename);
-    int function_type=-1;
-    
-    for(int i=0; i<inst_vector.size(); i++){
-        function_type = getfunc_type(inst_vector[i]);
-        if(function_type==0){
-            r_instruction rinst(inst_vector[i]);
+    vector<string> inst_vector = make_instuction_vector(filename);
+    if(inst_vector.size()!=0x1000000){
+        char function_type='0';
+       
+        function_type = getfunc_type(inst_vector[0+(pc/4)]);
+        if(function_type=='r'){
+            r_instruction rinst(inst_vector[0+(pc/4)]);
             int a = rinst.run(regs, pc);
-            cout<<"_____"<< pc<<endl;
+        } else if(function_type=='i'){
+            i_instruction iinst(inst_vector[0+(pc/4)]);
+            int a = iinst.run(regs, pc);
+        } else {
+            j_instruction jinst(inst_vector[0+(pc/4)]);
+            int a = jinst.run(pc);
         }
+                                     
+    } else {
+        cout<<"too many instructions for memory"<<endl;
     }
     
+    uint32_t b =0xFFFFFFFF;
+    b=b>>28;
+    b=b<<28;
+    cout<<b;
     
     return 0;
 }

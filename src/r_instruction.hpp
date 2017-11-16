@@ -19,6 +19,8 @@ public:
     int SLL(uint32_t *regs);
     int SRL(uint32_t *regs);
     int SRA(uint32_t *regs);
+    int SLLV(uint32_t *regs);
+    int SRLV(uint32_t *regs);
     int SRAV(uint32_t *regs);
     int JR(uint32_t* regs, uint32_t &pc);
     int ADD(uint32_t *regs);

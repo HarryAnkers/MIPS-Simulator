@@ -16,6 +16,12 @@ public:
     void pc_inc(uint32_t &pc);
     int run(uint32_t *regs, uint32_t &pc );
     
+    void BLTZ(uint32_t *regs, uint32_t &pc);
+    void BGEZ(uint32_t *regs, uint32_t &pc);
+    void BEQ(uint32_t *regs, uint32_t &pc);
+    void BNE(uint32_t *regs, uint32_t &pc);
+    void BLEZ(uint32_t *regs, uint32_t &pc);
+    void BGTZ(uint32_t *regs, uint32_t &pc);
     int ADDI(uint32_t *regs);
     void ADDIU(uint32_t *regs);
     void SLTI(uint32_t *regs);

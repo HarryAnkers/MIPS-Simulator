@@ -77,6 +77,24 @@ int r_instruction::SRA(uint32_t* regs){
     }
 }
 
+int r_instruction::SLLV(uint32_t* regs){
+    if(dest!=0){
+        return -12;
+    } else {
+        regs[dest]=regs[source2]<<regs[source1];
+        return 0;
+    }
+}
+
+int r_instruction::SRLV(uint32_t* regs){
+    if(dest!=0){
+        return -12;
+    } else {
+        regs[dest]=regs[source2]>>regs[source1];
+        return 0;
+    }
+}
+
 int r_instruction::SRAV(uint32_t* regs){
     if(shift!=0){
         return -12;
@@ -91,7 +109,7 @@ int r_instruction::SRAV(uint32_t* regs){
     }
 }
 
-int r_instruction::JR(uint32_t* regs, uint32_t &pc){
+int r_instruction::JR(uint32_t* regs, uint32_t &pc){//FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
         return -12;
     } else {
@@ -247,6 +265,14 @@ int r_instruction::run(uint32_t *regs, uint32_t &pc){
             break;
         case 0x3:
             returnval = SRA(regs);
+            pc_inc(pc);
+            break;
+        case 0x4:
+            returnval = SLLV(regs);
+            pc_inc(pc);
+            break;
+        case 0x6:
+            returnval = SRLV(regs);
             pc_inc(pc);
             break;
         case 0x7:

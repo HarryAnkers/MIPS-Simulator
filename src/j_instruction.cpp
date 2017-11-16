@@ -21,14 +21,21 @@ j_instruction::j_instruction(string instruction){
 
 j_instruction::~j_instruction(){}
 
-void j_instruction::pc_inc(uint32_t &pc){
-    pc+=4;
+void j_instruction::J(uint32_t &pc){
+    pc=pc>>28;
 }
 
-int j_instruction::run(uint32_t *regs, uint32_t &pc){
+int j_instruction::run(uint32_t &pc){
     int returnval = 0;
     
-    pc_inc(pc);
+    if(opcode==2){
+        J(pc);
+    } else if(opcode==3){
+        
+    } else{
+        returnval = -12;
+    }
+    
     return returnval;
 }
 

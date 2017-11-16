@@ -35,6 +35,53 @@ void i_instruction::pc_inc(uint32_t &pc){
     pc+=4;
 }
 
+void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc){
+    int32_t temp1 = (~regs[source1])+1;
+    if(temp1<0){
+        int32_t temp2 = simmediate<<2;
+        pc+=temp2;
+    }
+}
+
+void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc){
+    int32_t temp1 = (~regs[source1])+1;
+    if(temp1>=0){
+        int32_t temp2 = simmediate<<2;
+        pc+=temp2;
+    }
+}
+
+
+void i_instruction::BEQ(uint32_t *regs, uint32_t &pc){
+    if(regs[source1]==regs[dest]){
+        int32_t temp = simmediate<<2;
+        pc+=temp;
+    }
+}
+
+void i_instruction::BNE(uint32_t *regs, uint32_t &pc){
+    if(regs[source1]!=regs[dest]){
+        int32_t temp = simmediate<<2;
+        pc+=temp;
+    }
+}
+
+void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc){
+    int32_t temp1 = (~regs[source1])+1;
+    if(temp1<=0){
+        int32_t temp2 = simmediate<<2;
+        pc+=temp2;
+    }
+}
+
+void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc){
+    int32_t temp1 = (~regs[source1])+1;
+    if(temp1>0){
+        int32_t temp2 = simmediate<<2;
+        pc+=temp2;
+    }
+}
+
 int i_instruction::ADDI(uint32_t *regs){
     int returnval=0;
     
@@ -92,6 +139,41 @@ int i_instruction::run(uint32_t *regs, uint32_t &pc){
     int returnval = 0;
     
     switch(opcode){
+        case 0x1:
+            if(regs[dest]==0){
+                BLTZ(regs, pc);
+                pc_inc(pc);
+            } else if(regs[dest]==1){
+                BGEZ(regs, pc);
+                pc_inc(pc);
+            } else {
+                returnval = -12;
+            }
+            break;
+        case 0x4:
+            BEQ(regs, pc);
+            pc_inc(pc);
+            break;
+        case 0x5:
+            BNE(regs, pc);
+            pc_inc(pc);
+            break;
+        case 0x6:
+            if(regs[dest]==0){
+                BLEZ(regs, pc);
+                pc_inc(pc);
+            } else {
+                returnval = -12;
+            }
+            break;
+        case 0x7:
+            if(regs[dest]==0){
+                BGTZ(regs, pc);
+                pc_inc(pc);
+            } else {
+                returnval = -12;
+            }
+            break;
         case 0x8:
             returnval = ADDI(regs);
             break;
