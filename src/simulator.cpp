@@ -58,11 +58,9 @@ int main()
 {
     //declares the memory elements we will use
     uint32_t regs[32];
-    regs[1]=0x80000000;
-    regs[2]=0x80000000;
-    uint32_t* data = new uint32_t [0x4000000]();
+    //uint32_t ourdata[datasize]={0};
     uint32_t pc=0;
-    uint32_t getc, putc, HI, LO;
+    //uint32_t getc, putc, HI, LO;
     
     //converts the text file of instructions into a more managable vector of strings of instructions
     string filename = "textfile.txt";
@@ -73,23 +71,24 @@ int main()
         function_type = getfunc_type(inst_vector[0+(pc/4)]);
         if(function_type=='r'){
             r_instruction rinst(inst_vector[0+(pc/4)]);
-            int a = rinst.run(regs, pc);
+            rinst.run(regs, pc);
         } else if(function_type=='i'){
             i_instruction iinst(inst_vector[0+(pc/4)]);
-            int a = iinst.run(regs, pc);
+            iinst.run(regs, pc);
         } else {
             j_instruction jinst(inst_vector[0+(pc/4)]);
-            int a = jinst.run(pc);
+            jinst.run(regs, pc);
         }
                                      
     } else {
         cout<<"too many instructions for memory"<<endl;
     }
     
-    uint32_t b =0xFFFFFFFF;
-    b=b>>28;
-    b=b<<28;
-    cout<<b;
+    /*for(int i=0; i<datasize; i++){
+        if(data[i]!=nullptr){
+            delete data[i];
+        }
+    }*/
     
     return 0;
 }

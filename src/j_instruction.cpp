@@ -23,15 +23,26 @@ j_instruction::~j_instruction(){}
 
 void j_instruction::J(uint32_t &pc){
     pc=pc>>28;
+    pc=pc<<28;
+    uint32_t temp = immediate;
+    pc=pc+immediate;
 }
 
-int j_instruction::run(uint32_t &pc){
+void j_instruction::JAL(uint32_t *regs, uint32_t &pc){
+    regs[31]=pc+8;
+    pc=pc>>28;
+    pc=pc<<28;
+    uint32_t temp = immediate;
+    pc=pc+temp;
+}
+
+int j_instruction::run(uint32_t *regs, uint32_t &pc){
     int returnval = 0;
     
     if(opcode==2){
         J(pc);
     } else if(opcode==3){
-        
+        JAL(regs,pc);
     } else{
         returnval = -12;
     }

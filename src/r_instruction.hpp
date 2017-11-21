@@ -23,6 +23,7 @@ public:
     int SRLV(uint32_t *regs);
     int SRAV(uint32_t *regs);
     int JR(uint32_t* regs, uint32_t &pc);
+    int JALR(uint32_t* regs, uint32_t &pc);
     int ADD(uint32_t *regs);
     int ADDU(uint32_t *regs);
     int SUB(uint32_t *regs);

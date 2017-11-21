@@ -12,9 +12,10 @@ public:
     j_instruction(string instruction);
     ~j_instruction();
     
-    int run(uint32_t &pc);
+    int run(uint32_t *regs, uint32_t &pc);
     
     void J(uint32_t &pc);
+    void JAL(uint32_t *regs, uint32_t &pc);
     
 //private:
     int opcode;

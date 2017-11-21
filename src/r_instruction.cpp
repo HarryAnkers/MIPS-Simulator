@@ -109,10 +109,20 @@ int r_instruction::SRAV(uint32_t* regs){
     }
 }
 
-int r_instruction::JR(uint32_t* regs, uint32_t &pc){//FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+int r_instruction::JR(uint32_t* regs, uint32_t &pc){
     if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
         return -12;
     } else {
+        pc=regs[source1];
+        return 0;
+    }
+}
+
+int r_instruction::JALR(uint32_t* regs, uint32_t &pc){
+    if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
+        return -12;
+    } else {
+        regs[31]=pc+8;
         pc=regs[source1];
         return 0;
     }
@@ -280,7 +290,10 @@ int r_instruction::run(uint32_t *regs, uint32_t &pc){
             pc_inc(pc);
             break;
         case 0x08:
-            JR(regs, pc);
+            returnval = JR(regs, pc);
+            break;
+        case 0x09:
+            returnval = JALR(regs, pc);
             break;
         case 0x20:
             returnval = ADD(regs);
