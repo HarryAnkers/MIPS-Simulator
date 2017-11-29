@@ -234,7 +234,7 @@ void i_instruction::XORI(uint32_t *regs){
     regs[dest]=regs[source1]|temp;
 }
 
-int i_instruction::x(uint32_t *regs, uint32_t *data){
+int i_instruction::SW(uint32_t *regs, uint32_t *data){
     
     return 0;
 }
