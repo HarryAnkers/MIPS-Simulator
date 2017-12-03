@@ -10,20 +10,30 @@ using namespace std;
 
 class r_instruction{
 public:
-    r_instruction(string instruction);
+    r_instruction(uint32_t instruction);
     ~r_instruction();
     
+    //functions to choose function and inc pc counter
     void pc_inc(uint32_t &pc);
-    int run(uint32_t *regs, uint32_t &pc );
+    int run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc );
     
+    //all possible ops
     int SLL(uint32_t *regs);
     int SRL(uint32_t *regs);
     int SRA(uint32_t *regs);
     int SLLV(uint32_t *regs);
     int SRLV(uint32_t *regs);
     int SRAV(uint32_t *regs);
-    int JR(uint32_t* regs, uint32_t &pc);
-    int JALR(uint32_t* regs, uint32_t &pc);
+    int JR(uint32_t *regs, uint32_t &pc);
+    int JALR(uint32_t *regs, uint32_t &pc);
+    int MFHI(uint32_t *regs, uint32_t &HI);
+    int MTHI(uint32_t *regs, uint32_t &HI);
+    int MFLO(uint32_t *regs, uint32_t &LO);
+    int MTLO(uint32_t *regs, uint32_t &LO);
+    int MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    int MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    int DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    int DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO);
     int ADD(uint32_t *regs);
     int ADDU(uint32_t *regs);
     int SUB(uint32_t *regs);
@@ -34,8 +44,7 @@ public:
     int SLT(uint32_t *regs);
     int SLTU(uint32_t *regs);
     
-    
-//private:
+    //variables
     int opcode;
     int source1;
     int source2;
@@ -46,6 +55,3 @@ public:
 
 
 #endif
-
-
-
