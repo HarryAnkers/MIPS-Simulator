@@ -17,8 +17,9 @@ using namespace std;
 
 //function to convert the file of binary instructions to a string of char "1" and "0"
 void make_instuction_vector(string filename){
-    //declares a uint8 for each byte and a uint32 for each line
-    uint8_t instbyte=0;
+    //declares a uint16 for each byte and a uint32 for each line
+    //NOTE -- WE TRIED U8 FOR THE BYTE BUT IT ONLY READ ONE DIGIT AT A TIME
+    uint16_t instbyte=0;
     uint32_t instline;
     
     //declares fstream
@@ -71,9 +72,7 @@ int main(int argc, const char * argv[])
     int flag = 0;
     
     //converts the text file of instructions into a more managable vector of uint32 instructions
-    //string filename = argv(1)
     make_instuction_vector(argv[1]);
-    
     
     while(done == false){
         if(flag==0){
