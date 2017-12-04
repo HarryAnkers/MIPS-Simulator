@@ -19,7 +19,7 @@ public:
     
     //function to inc pc and select op
     void pc_inc(uint32_t &pc);
-    int run(uint32_t *data, uint32_t *regs, uint32_t &pc);
+    int run(uint32_t *data, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc);
     
     //seperate ops for storing and loading
     int store(uint32_t *data, uint32_t dataval ,int datalength,uint32_t addr);
@@ -34,14 +34,14 @@ public:
     void BNE(uint32_t *regs, uint32_t &pc);
     void BLEZ(uint32_t *regs, uint32_t &pc);
     void BGTZ(uint32_t *regs, uint32_t &pc);
-    int ADDI(uint32_t *regs);
+    void  ADDI(uint32_t *regs);
     void ADDIU(uint32_t *regs);
     void SLTI(uint32_t *regs);
     void SLTIU(uint32_t *regs);
     void ANDI(uint32_t *regs);
     void ORI(uint32_t *regs);
     void XORI(uint32_t *regs);
-    int LUI(uint32_t *regs);
+    void LUI(uint32_t *regs);
     int LB(uint32_t *regs, uint32_t *data);
     int LH(uint32_t *regs, uint32_t *data);
     int LWL(uint32_t *regs, uint32_t *data);

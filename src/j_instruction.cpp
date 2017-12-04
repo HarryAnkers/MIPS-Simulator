@@ -32,9 +32,7 @@ void j_instruction::JAL(uint32_t *regs, uint32_t &pc){
     pc=pc+immediate;
 }
 
-int j_instruction::run(uint32_t *regs, uint32_t &pc){
-    int returnval = 0;
-    
+void j_instruction::run(uint32_t *regs, uint32_t &pc){
     //chooses function
     if(opcode==2){
         J(pc);
@@ -42,10 +40,8 @@ int j_instruction::run(uint32_t *regs, uint32_t &pc){
         JAL(regs,pc);
     } else{
         //if no func is selected returns an error (should never reach)
-        returnval = -12;
+        exit(-12);
     }
-    
-    return returnval;
 }
 
 

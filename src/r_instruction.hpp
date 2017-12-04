@@ -15,34 +15,34 @@ public:
     
     //functions to choose function and inc pc counter
     void pc_inc(uint32_t &pc);
-    int run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc );
+    void run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc );
     
     //all possible ops
-    int SLL(uint32_t *regs);
-    int SRL(uint32_t *regs);
-    int SRA(uint32_t *regs);
-    int SLLV(uint32_t *regs);
-    int SRLV(uint32_t *regs);
-    int SRAV(uint32_t *regs);
-    int JR(uint32_t *regs, uint32_t &pc);
-    int JALR(uint32_t *regs, uint32_t &pc);
-    int MFHI(uint32_t *regs, uint32_t &HI);
-    int MTHI(uint32_t *regs, uint32_t &HI);
-    int MFLO(uint32_t *regs, uint32_t &LO);
-    int MTLO(uint32_t *regs, uint32_t &LO);
-    int MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO);
-    int MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO);
-    int DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO);
-    int DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO);
-    int ADD(uint32_t *regs);
-    int ADDU(uint32_t *regs);
-    int SUB(uint32_t *regs);
-    int SUBU(uint32_t *regs);
-    int AND(uint32_t *regs);
-    int OR(uint32_t *regs);
-    int XOR(uint32_t *regs);
-    int SLT(uint32_t *regs);
-    int SLTU(uint32_t *regs);
+    void SLL(uint32_t *regs);
+    void SRL(uint32_t *regs);
+    void SRA(uint32_t *regs);
+    void SLLV(uint32_t *regs);
+    void SRLV(uint32_t *regs);
+    void SRAV(uint32_t *regs);
+    void JR(uint32_t *regs, uint32_t &pc);
+    void JALR(uint32_t *regs, uint32_t &pc);
+    void MFHI(uint32_t *regs, uint32_t &HI);
+    void MTHI(uint32_t *regs, uint32_t &HI);
+    void MFLO(uint32_t *regs, uint32_t &LO);
+    void MTLO(uint32_t *regs, uint32_t &LO);
+    void MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    void MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    void DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    void DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO);
+    void ADD(uint32_t *regs);
+    void ADDU(uint32_t *regs);
+    void SUB(uint32_t *regs);
+    void SUBU(uint32_t *regs);
+    void AND(uint32_t *regs);
+    void OR(uint32_t *regs);
+    void XOR(uint32_t *regs);
+    void SLT(uint32_t *regs);
+    void SLTU(uint32_t *regs);
     
     //variables
     int opcode;

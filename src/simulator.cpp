@@ -16,7 +16,7 @@ vector<uint32_t> ROM;
 using namespace std;
 
 //function to convert the file of binary instructions to a string of char "1" and "0"
-void make_instuction_vector(string filename, int &error){
+void make_instuction_vector(string filename){
     //declares a uint8 for each byte and a uint32 for each line
     uint8_t instbyte=0;
     uint32_t instline;
@@ -41,9 +41,13 @@ void make_instuction_vector(string filename, int &error){
         //stops at the end of the file
         
         if(ROM.size()>instsize){
-            error = 2;
+            //too many instructions"
+            exit(-11);
         }
-    } else { error = 1; }
+    } else {
+        //no file was opened
+        exit(-12);
+    }
 }
 
 char getfunc_type(uint32_t instruction){
@@ -62,45 +66,34 @@ int main(int argc, const char * argv[])
     
     uint32_t pc=0;
     uint32_t getc, putc, HI, LO;
-    int error = 0;
     bool done = false;
+    
+    int flag = 0;
     
     //converts the text file of instructions into a more managable vector of uint32 instructions
     //string filename = argv(1)
-    make_instuction_vector(argv[1], error);
+    make_instuction_vector(argv[1]);
     
     
     while(done == false){
-        if(error==0){
+        if(flag==0){
             //checks the opcode and creates a class accordingly
             char function_type='0';
            
             function_type = getfunc_type(ROM[0+(pc/4)]);
             if(function_type=='r'){
                 r_instruction rinst(ROM[0+(pc/4)]);
-                error = rinst.run(HI, LO, regs, pc);
+                rinst.run(HI, LO, regs, pc);
             } else if(function_type=='i'){
                 i_instruction iinst(ROM[0+(pc/4)]);
-                error = iinst.run(RAM, regs, pc);
-            } else {
+                flag = iinst.run(RAM, regs, pc, putc, getc);
+            } else if(function_type=='j'){
                 j_instruction jinst(ROM[0+(pc/4)]);
-                error = jinst.run(regs, pc);
-            }
-            
-            if((error != 0)&&(error != -1)){
-                cout<< "error: "<<error<<endl;
-            } else if( error ==-1){
-                //bool to finish
-                done = true;
-            } else if(error == 1) {
-                cout<<"error: file could not open"<<endl;
-            } else if(error == 2) {
-                cout<<"error: too many instructions"<<endl;
-            } else if(error == 3) {
-                //need to add get c func
+                jinst.run(regs, pc);
             }
         }
-        cout<<"program executed"<<endl<<endl;
-        return 0;
+        done = true;
     }
+    //program executed successfully and returned the exit code below
+    exit(regs[2]&0x000000FF);
 }

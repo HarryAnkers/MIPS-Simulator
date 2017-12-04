@@ -89,7 +89,10 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         data[(addr-startloc)/4]=dataval;
                         break;
                 }
-            }else{ return -11; }
+            }else{
+                //word outside datasize
+                exit(-11);
+            }
         //half word case
         } else if(datalength==16){
             //checks if the word (and if needed the word proceeding) is within the size
@@ -129,7 +132,10 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         data[(addr-startloc)/4]=temp;
                         break;
                 }
-            }else{ return -11; }
+            }else{
+                //word outside datasize
+                exit(-11);
+            }
         //byte case
         } else if(datalength==8){
             //checks within data size
@@ -164,11 +170,20 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         data[(addr-startloc)/4]=temp;
                     break;
                 }
-            }else{ return -11; }
+            }else{
+                //word outside datasize
+                exit(-11);
+            }
         //only need word, half-word and byte if none throws error
-        }else{ return -12; }
+        }else{
+            //has picked a different type of function (should never hit)
+            exit(-20);
+        }
     //error for less than range
-    }else{ return -11; }
+    }else{
+        //word outside datasize
+        exit(-11);
+    }
     return 0;
 }
 
@@ -177,7 +192,7 @@ int i_instruction::load(uint32_t *data, uint32_t &returndata,int datalength,uint
     uint32_t temp = 0;
     int startloc = 0;
     
-    //if read addr is ADDR_GETC it returns -1
+    //if read addr is ADDR_GETC it returns 3
     if(addr==0x30000000){
         return 3;
     }
@@ -237,7 +252,10 @@ int i_instruction::load(uint32_t *data, uint32_t &returndata,int datalength,uint
                         returndata = data[(addr-startloc)/4];
                         break;
                 }
-            } else { return -11; }
+            } else {
+                //word outside datasize
+                exit(-11);
+            }
         //half word case
         } else if(datalength==16){
             //checks it is lower than the data size boundary
@@ -275,7 +293,10 @@ int i_instruction::load(uint32_t *data, uint32_t &returndata,int datalength,uint
                         returndata=temp;
                         break;
                 }
-            } else { return -11; }
+            } else {
+                //word outside datasize
+                exit(-11);
+            }
         //byte case
         } else if(datalength==8){
             if((addr-(addr%4))<=datasize){
@@ -308,11 +329,20 @@ int i_instruction::load(uint32_t *data, uint32_t &returndata,int datalength,uint
                         returndata = temp;
                         break;
                 }
-            } else { return -11; }
-        //only need word, half-word and byte case throw instruction error if not
-        } else { return -11; }
+            } else {
+                //word outside datasize
+                exit(-11);
+            }
+        //only need word, half-word and byte case throw internal error if not
+        } else {
+            //has picked a different type of function (should never hit)
+            exit(-20);
+        }
     //error for if less than offset
-    } else { return -12; }
+    } else {
+        //word outside datasize
+        exit(-11);
+    }
     return 0;
 }
 
@@ -400,9 +430,7 @@ void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc){
     }
 }
 
-int i_instruction::ADDI(uint32_t *regs){
-    int returnval=0;
-    
+void i_instruction::ADDI(uint32_t *regs){
     //total
     regs[dest]=regs[source1]+simmediate;
     
@@ -413,11 +441,10 @@ int i_instruction::ADDI(uint32_t *regs){
         //checks if the first added number is not the same sign as the total
         if((regs[source1]&(0x80000000))!=
            (regs[dest]&(0x80000000))){
-            //if both if statements true there is overflow
-            returnval=-10;
+            //there is overflow
+            exit(-10);
         }
     }
-    return returnval;
 }
 
 void i_instruction::ADDIU(uint32_t *regs){
@@ -464,15 +491,15 @@ void i_instruction::XORI(uint32_t *regs){
     regs[dest]=regs[source1]^temp;
 }
 
-int i_instruction::LUI(uint32_t *regs){
-    int returnval=0;
-    
+void i_instruction::LUI(uint32_t *regs){
     //checks inst format
     if(regs[source1]==0){
         //shifts immediate and stores it
         regs[dest] = uimmediate<<16;
-    } else { returnval = -12; }
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
 int i_instruction::LB(uint32_t *regs, uint32_t *data){
@@ -497,11 +524,11 @@ int i_instruction::LB(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::LH(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses load function for accessing data
     returnval = load(data, regvalue, 16, virtaddr);
@@ -518,11 +545,11 @@ int i_instruction::LH(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::LWL(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //loads the left half-word
     returnval = load(data, regvalue, 16, virtaddr);
@@ -534,11 +561,11 @@ int i_instruction::LWL(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::LW(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses load function for accessing data
     returnval = load(data, regvalue, 32, virtaddr);
@@ -550,11 +577,11 @@ int i_instruction::LW(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::LBU(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses load function for accessing data
     returnval = load(data, regvalue, 8, virtaddr);
@@ -566,11 +593,11 @@ int i_instruction::LBU(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::LHU(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses load function for accessing data
     returnval = load(data, regvalue, 16, virtaddr);
@@ -582,6 +609,7 @@ int i_instruction::LHU(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::LWR(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
@@ -589,7 +617,6 @@ int i_instruction::LWR(uint32_t *regs, uint32_t *data){
     
     //subtracts one to start the load from one byte to the left
     virtaddr -= 1;
-    int returnval = 0;
     
     //uses load function for accessing data
     returnval = load(data, regvalue, 16, virtaddr);
@@ -601,13 +628,13 @@ int i_instruction::LWR(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::SB(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     //retrives ls byte and ands it to only keep the ls byte
     uint32_t regvalue = (regs[dest]&0x000000FF);
     
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses store function
     returnval = store(data, regvalue, 8, virtaddr);
@@ -616,13 +643,13 @@ int i_instruction::SB(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::SH(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     //retrives ls half-word and ands it to only keep the ls half-word
     uint32_t regvalue = (regs[dest]&0x0000FFFF);
     
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses store function
     returnval = store(data, regvalue, 16, virtaddr);
@@ -631,13 +658,13 @@ int i_instruction::SH(uint32_t *regs, uint32_t *data){
 }
 
 int i_instruction::SW(uint32_t *regs, uint32_t *data){
+    int returnval = 0;
     //retrives word
     uint32_t regvalue = regs[dest];
     
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
     virtaddr = virtaddr<<2;
-    int returnval = 0;
     
     //uses store function
     returnval = store(data, regvalue, 32, virtaddr);
@@ -645,7 +672,7 @@ int i_instruction::SW(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc){
+int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc){
     int returnval = 0;
     
     //chooses function
@@ -680,7 +707,7 @@ int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc){
             } else { returnval = -12; }
             break;
         case 0x8:
-            returnval = ADDI(regs);
+            ADDI(regs);
             break;
         case 0x9:
             ADDIU(regs);
@@ -701,7 +728,7 @@ int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc){
             XORI(regs);
             break;
         case 0x0F:
-            returnval = LUI(regs);
+            LUI(regs);
             break;
         case 0x20:
             returnval = LB(regs, data);
@@ -735,7 +762,8 @@ int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc){
             break;
         //if none choosen throws error
         default:
-            returnval = -12;
+            //none choosen
+            exit(-12);
     }
     //all inc pc
     pc_inc(pc);

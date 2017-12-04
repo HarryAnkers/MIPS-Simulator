@@ -30,32 +30,33 @@ void r_instruction::pc_inc(uint32_t &pc){
     pc+=4;
 }
 
-int r_instruction::SLL(uint32_t* regs){
+void r_instruction::SLL(uint32_t* regs){
     //checks inst format
     if(source1!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //shifts the reg and stores it
         regs[dest]=regs[source2]<<shift;
-        return 0;
     }
 }
 
-int r_instruction::SRL(uint32_t* regs){
+void r_instruction::SRL(uint32_t* regs){
     //checks inst format
     if(source1!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //shifts the reg and stores it
         regs[dest]=regs[source2]>>shift;
-        return 0;
     }
 }
 
-int r_instruction::SRA(uint32_t* regs){
+void r_instruction::SRA(uint32_t* regs){
     //checks inst format
     if(source1!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //shifts the reg and adds a msb of 1 for signed numbers on loop
         for(int i=0; i<shift; i++){
@@ -64,36 +65,36 @@ int r_instruction::SRA(uint32_t* regs){
                 regs[dest]+=0x80000000;
             }
         }
-        return 0;
     }
 }
 
-int r_instruction::SLLV(uint32_t* regs){
+void r_instruction::SLLV(uint32_t* regs){
     //checks inst format
     if(dest!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //shifts the reg and stores it
         regs[dest]=regs[source2]<<regs[source1];
-        return 0;
     }
 }
 
-int r_instruction::SRLV(uint32_t* regs){
+void r_instruction::SRLV(uint32_t* regs){
     //checks inst format
     if(dest!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //shifts the reg and stores it
         regs[dest]=regs[source2]>>regs[source1];
-        return 0;
     }
 }
 
-int r_instruction::SRAV(uint32_t* regs){
+void r_instruction::SRAV(uint32_t* regs){
     //checks inst format
     if(shift!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //shifts the reg and adds a msb of 1 for signed numbers on loop
         for(int i=0; i<regs[source1]; i++){
@@ -102,81 +103,78 @@ int r_instruction::SRAV(uint32_t* regs){
                 regs[dest]+=0x80000000;
             }
         }
-        return 0;
     }
 }
 
-int r_instruction::JR(uint32_t* regs, uint32_t &pc){
+void r_instruction::JR(uint32_t* regs, uint32_t &pc){
     //checks inst format
     if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //pc is set to reg value
         pc=regs[source1];
-        return 0;
     }
 }
 
-int r_instruction::JALR(uint32_t* regs, uint32_t &pc){
+void r_instruction::JALR(uint32_t* regs, uint32_t &pc){
     //checks inst format
     if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //the pc value + a delay of 8 is stored in the return register
         regs[31]=pc+8;
         //pc is set to reg value
         pc=regs[source1];
-        return 0;
     }
 }
 
-int r_instruction::MFHI(uint32_t *regs, uint32_t &HI){
-    int returnval = 0;
-    
+void r_instruction::MFHI(uint32_t *regs, uint32_t &HI){
     //checks inst format
     if(((source1==0)&&(source2==0))&&(shift==0)){
         //stores HI reg value into reg
         regs[dest]=HI;
-    } else { returnval = -12; }
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::MTHI(uint32_t *regs, uint32_t &HI){
-    int returnval = 0;
-    
+void r_instruction::MTHI(uint32_t *regs, uint32_t &HI){
     //checks inst format
     if(((source2==0)&&(dest==0))&&(shift==0)){
         //stores the reg value in the HI reg
         HI = regs[source1];
-    } else { returnval = -12; }
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::MFLO(uint32_t *regs, uint32_t &LO){
-    int returnval = 0;
-    
+void r_instruction::MFLO(uint32_t *regs, uint32_t &LO){
     //checks inst format
     if(((source1==0)&&(source2==0))&&(shift==0)){
         //stores the LO reg value into reg
         regs[dest]=LO;
-    } else { returnval = -12; }
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::MTLO(uint32_t *regs, uint32_t &LO){
-    int returnval = 0;
-    
+void r_instruction::MTLO(uint32_t *regs, uint32_t &LO){
     //checks inst format
     if(((source2==0)&&(dest==0))&&(shift==0)){
         //stores reg value into LO reg
         LO= regs[source1];
-    } else { returnval = -12; }
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO){
-    int returnval = 0;
-    
+void r_instruction::MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if((dest==0)&&(shift==0)){
         //converts the registers to signed variables and multiplies them into a 64b variable
@@ -188,13 +186,13 @@ int r_instruction::MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO){
         LO = result;
         result = result>>32;
         HI = result;
-    } else { returnval = -12;}
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
-    int returnval= 0;
-    
+void r_instruction::MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if((dest==0)&&(shift==0)){
         //performs multiplication
@@ -204,13 +202,13 @@ int r_instruction::MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
         LO = result;
         result = result>>32;
         HI = result;
-    } else { returnval = -12;}
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO){
-    int returnval= 0;
-    
+void r_instruction::DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if(((dest==0)&&(shift==0))||(regs[source2]!=0)){
         int32_t result, sreg1, sreg2;
@@ -229,13 +227,13 @@ int r_instruction::DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO){
         //LO recieves the result and HI receives the remainder of the operation
         LO=result;
         HI=remainder;
-    } else { returnval = -12;}
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
-    int returnval= 0;
-    
+void r_instruction::DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if(((dest==0)&&(shift==0))||(regs[source2]!=0)){
         uint32_t result, remainder, temp;
@@ -249,18 +247,18 @@ int r_instruction::DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
         //LO recieves the result and HI receives the remainder of the operation
         LO=result;
         HI=remainder;
-    } else { returnval = -12;}
-    return returnval;
+    } else {
+        //-invalid instr format
+        exit(-12);
+    }
 }
 
-int r_instruction::ADD(uint32_t *regs){
-    int returnval=0;
-    
+void r_instruction::ADD(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        returnval = -12;
+        //-invalid instr format
+        exit(-12);
     } else{
-        int returnval=0;
         //declares signed versions of the values
         int32_t sreg1 = regs[source1];
         int32_t sreg2 = regs[source2];
@@ -272,32 +270,36 @@ int r_instruction::ADD(uint32_t *regs){
         
         //checks for overflow
         if((sreg1>0)==(sreg2>0)){
-            if(stotal<0){ returnval = -10; }
+            if(stotal<0){
+                //overflow occured
+                exit(-10);
+            }
         }
         if((sreg1<0)==(sreg2<0)){
-            if(stotal>0){ returnval = -10; }
+            if(stotal>0){
+                //overflow occured
+                exit(-10);
+            }
         }
     }
-    return returnval;
 }
 
-int r_instruction::ADDU(uint32_t *regs){
+void r_instruction::ADDU(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //performs addition
         regs[dest]=regs[source1]+regs[source2];
-        return 0;
     }
 }
 
-int r_instruction::SUB(uint32_t *regs){
-    int returnval=0;
-    
+void r_instruction::SUB(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        returnval = -12;
+        //-invalid instr format
+        exit(-12);
     }
     else{
         //declares signed versions of the values
@@ -311,63 +313,63 @@ int r_instruction::SUB(uint32_t *regs){
     
         //checks for overflow
         if((sreg1>0)!=(sreg2<0)){
-            if(sresult<0){ returnval=-10; }
+            if(sresult<0){
+                //overflow occured
+                exit(-10);
+            }
         }
     }
-    return returnval;
 }
 
-int r_instruction::SUBU(uint32_t *regs){
+void r_instruction::SUBU(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     }else{
         //performs subtraction
         regs[dest]=regs[source1]-regs[source2];
-        return 0;
     }
 }
 
-int r_instruction::AND(uint32_t *regs){
+void r_instruction::AND(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //bitwise and
         regs[dest]=regs[source1]&regs[source2];
-        
-        return 0;
     }
 }
 
-int r_instruction::OR(uint32_t *regs){
+void r_instruction::OR(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //bitwise or
         regs[dest]=regs[source1]|regs[source2];
-        return 0;
     }
 }
 
-int r_instruction::XOR(uint32_t *regs){
+void r_instruction::XOR(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        return -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //bitwise xor
         regs[dest]=regs[source1]^regs[source2];
-        return 0;
     }
 }
 
-int r_instruction::SLT(uint32_t *regs){
-    int returnval = 0;
-    
+void r_instruction::SLT(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        returnval = -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //converts to signed
         int32_t sreg1 = regs[source1];
@@ -377,118 +379,112 @@ int r_instruction::SLT(uint32_t *regs){
         if(sreg1<sreg2){ regs[dest]=1; }
         else{ regs[dest]=0; }
     }
-    return returnval;
 }
 
-int r_instruction::SLTU(uint32_t *regs){
-    int returnval = 0;
-    
+void r_instruction::SLTU(uint32_t *regs){
     //checks inst format
     if(shift!=0){
-        returnval = -12;
+        //-invalid instr format
+        exit(-12);
     } else {
         //performs comparison, sets reg to 1 if true and 0 if not
         if(regs[source1]<regs[source2]){ regs[dest]=1; }
         else { regs[dest]=0; }
     }
-    return returnval;
 }
 
 //checks what function to run
-int r_instruction::run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc){
-    int returnval = 0;
-    
+void r_instruction::run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc){
     //by default the pc will inc
     bool pcinc = true;
     
     //checks func code to corresponding function
     switch(func){
         case 0x0:
-            returnval = SLL(regs);
+            SLL(regs);
             break;
         case 0x2:
-            returnval = SRL(regs);
+            SRL(regs);
             break;
         case 0x3:
-            returnval = SRA(regs);
+            SRA(regs);
             break;
         case 0x4:
-            returnval = SLLV(regs);
+            SLLV(regs);
             break;
         case 0x6:
-            returnval = SRLV(regs);
+            SRLV(regs);
             break;
         case 0x7:
-            returnval = SRAV(regs);
+            SRAV(regs);
             break;
         case 0x08:
-            returnval = JR(regs, pc);
+            JR(regs, pc);
             pcinc=false;
             break;
         case 0x09:
-            returnval = JALR(regs, pc);
+            JALR(regs, pc);
             pcinc=false;
             break;
         case 0x10:
-            returnval = MFHI(regs, HI);
+            MFHI(regs, HI);
             break;
         case 0x11:
-            returnval = MTHI(regs, HI);
+            MTHI(regs, HI);
             break;
         case 0x12:
-            returnval = MFLO(regs, LO);
+            MFLO(regs, LO);
             break;
         case 0x13:
-            returnval = MTLO(regs, LO);
+            MTLO(regs, LO);
             break;
         case 0x18:
-            returnval = MULT(regs, HI, LO);
+            MULT(regs, HI, LO);
             break;
         case 0x19:
-            returnval = MULTU(regs, HI, LO);
+            MULTU(regs, HI, LO);
             break;
         case 0x1A:
-            returnval = DIV(regs, HI, LO);
+            DIV(regs, HI, LO);
             break;
         case 0x1B:
-            returnval = DIVU(regs, HI, LO);
+            DIVU(regs, HI, LO);
             break;
         case 0x20:
-            returnval = ADD(regs);
+            ADD(regs);
             break;
         case 0x21:
-            returnval = ADDU(regs);
+            ADDU(regs);
             break;
         case 0x22:
-            returnval = SUB(regs);
+            SUB(regs);
             break;
         case 0x23:
-            returnval = SUBU(regs);
+            SUBU(regs);
             break;
         case 0x24:
-            returnval = AND(regs);
+            AND(regs);
             break;
         case 0x25:
-            returnval = OR(regs);
+            OR(regs);
             break;
         case 0x26:
-            returnval = XOR(regs);
+            XOR(regs);
             break;
         case 0x2A:
-            returnval = SLT(regs);
+            SLT(regs);
             break;
         case 0x2B:
-            returnval = SLTU(regs);
+            SLTU(regs);
             break;
         //throws error if none of the ops were selected
         default:
-            returnval = -12;
+            //none were selected
+            exit(-12);
     }
     //inc pc if it hasn't been told not to
     if(pcinc){ pc_inc(pc); }
     
     //ensures $0 is still 0
     regs[0]=0;
-    
-    return returnval;
 }
