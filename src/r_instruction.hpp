@@ -45,12 +45,12 @@ public:
     void SLTU(uint32_t *regs);
     
     //variables
-    int opcode;
-    int source1;
-    int source2;
-    int dest;
-    int shift;
-    int func;
+    uint32_t opcode;
+    uint32_t source1;
+    uint32_t source2;
+    uint32_t dest;
+    uint32_t shift;
+    uint32_t func;
 };
 
 

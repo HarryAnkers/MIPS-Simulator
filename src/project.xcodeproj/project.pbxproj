@@ -28,6 +28,7 @@
 /* Begin PBXFileReference section */
 		3A46ADD21FBA4A19006F4226 /* simulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simulator.cpp; sourceTree = "<group>"; };
 		3A46ADD41FBA4A87006F4226 /* textfile.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = textfile.txt; sourceTree = "<group>"; };
+		3A9842941FD6DA6700DB0E52 /* 1st.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = 1st.bin; sourceTree = "<group>"; };
 		3A9D481E1FBB35B500C44093 /* r_instruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = r_instruction.cpp; sourceTree = "<group>"; };
 		3A9D481F1FBB35B500C44093 /* r_instruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = r_instruction.hpp; sourceTree = "<group>"; };
 		3A9D48211FBB994800C44093 /* j_instruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = j_instruction.cpp; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 				3A9D48221FBB994800C44093 /* j_instruction.hpp */,
 				3A9D48211FBB994800C44093 /* j_instruction.cpp */,
 				3A46ADD41FBA4A87006F4226 /* textfile.txt */,
+				3A9842941FD6DA6700DB0E52 /* 1st.bin */,
 			);
 			sourceTree = "<group>";
 		};

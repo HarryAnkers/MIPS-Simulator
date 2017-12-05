@@ -19,12 +19,16 @@ using namespace std;
 void make_instuction_vector(string filename){
     //declares a uint16 for each byte and a uint32 for each line
     //NOTE -- WE TRIED U8 FOR THE BYTE BUT IT ONLY READ ONE DIGIT AT A TIME
-    uint16_t instbyte=0;
-    uint32_t instline;
+    uint8_t instbyte=0;
+    uint32_t instline=0;
     
     //declares fstream
     ifstream myfile;
     myfile.open(filename);
+    
+    //needs this so it doesnt skip anything it thinks is the char equivelent to a space
+    myfile >> noskipws;
+    
     if(myfile.is_open()){
         
         //puts 32 char into the instruction vector
@@ -32,7 +36,7 @@ void make_instuction_vector(string filename){
             instline=0;
             for(int i=0; i<4; i++){
                 myfile>>instbyte;
-                instline += instbyte*pow(2, (8*(3-i)));
+                instline += instbyte<<(8*(3-i));
             }
             
             if(!myfile.eof()){
@@ -43,16 +47,18 @@ void make_instuction_vector(string filename){
         
         if(ROM.size()>instsize){
             //too many instructions"
+            myfile.close();
             exit(-11);
         }
     } else {
         //no file was opened
         exit(-12);
     }
+    myfile.close();
 }
 
 char getfunc_type(uint32_t instruction){
-    int opcode=instruction>>24;
+    int opcode=instruction>>26;
     
     if(opcode==0){ return 'r';}
     else if(opcode==2||opcode==3){ return 'j';}
@@ -72,7 +78,7 @@ int main(int argc, const char * argv[])
     int flag = 0;
     
     //converts the text file of instructions into a more managable vector of uint32 instructions
-    make_instuction_vector(argv[1]);
+    make_instuction_vector("1st.bin");
     
     while(done == false){
         if(flag==0){

@@ -20,8 +20,8 @@ public:
     void JAL(uint32_t *regs, uint32_t &pc);
     
 //private:
-    int opcode;
-    int immediate;
+    uint32_t opcode;
+    uint32_t immediate;
 };
 
 #endif
