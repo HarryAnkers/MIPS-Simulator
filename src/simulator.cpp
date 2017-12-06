@@ -75,7 +75,6 @@ int main(int argc, const char * argv[])
     
     uint32_t pc=0;
     uint32_t getc, putc, HI, LO;
-    bool done = false;
     
     int flag = 0;
     

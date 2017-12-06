@@ -1,7 +1,7 @@
 #include "i_instruction.hpp"
 #include <iostream>
 
-i_instruction::i_instruction(uint32_t instruction, uint32_t ROM_size){
+i_instruction::i_instruction(uint32_t instruction){
     //decodes the instructions into components
     opcode=instruction>>26;
 

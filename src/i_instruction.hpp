@@ -14,7 +14,7 @@ using namespace std;
 
 class i_instruction{
 public:
-    i_instruction(uint32_t i_instruction, uint32_t ROM_size);
+    i_instruction(uint32_t i_instruction);
     
     ~i_instruction();
     

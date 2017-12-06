@@ -20,7 +20,6 @@ r_instruction::r_instruction(uint32_t instruction){
     
     func=instruction<<26;
     func=func>>26;
-    cout<<func<<endl;
 }
 
 //deconstructor
