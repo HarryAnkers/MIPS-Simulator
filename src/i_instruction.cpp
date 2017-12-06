@@ -1,7 +1,7 @@
 #include "i_instruction.hpp"
 #include <iostream>
 
-i_instruction::i_instruction(uint32_t instruction){
+i_instruction::i_instruction(uint32_t instruction, uint32_t ROM_size){
     //decodes the instructions into components
     opcode=instruction>>26;
 
@@ -28,9 +28,37 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
     int startloc = -1;
     uint32_t temp = 0;
     
-    //if write addr is ADDR_NULL it returns -1
-    if(addr==0x30000000){
-        return -1;
+    //if write addr is changing only ADDR_NULL it returns -1
+    if(addr<4){
+        if(datalength==32){
+            if(addr==0){ return -1; }
+            else { exit(-11); }
+        } else if(datalength==16){
+            if(addr<3){ return -1; }
+            else { exit(-11); }
+        } else if(datalength==8){ return -1; }
+        exit(-20);
+    }
+    
+    //code for PUTC
+    if((addr>=0x30000004)&&(addr<0x30000008)){
+        char temp = 0;
+        if(datalength==32){
+            if(addr==0x30000004){
+                temp = datalength&0x000000FF;
+                cout<<temp;
+            } else { exit(-11); }
+        } else if(datalength==16){
+            if(addr==0x30000006){
+                temp = datalength&0x000000FF;
+                cout<<temp;
+            } else { exit(-11); }
+        } else if(datalength==8){
+            if(addr==0x30000007){
+                temp = datalength&0x000000FF;
+            } else { exit(-11); }
+        } else { exit(-20);}
+        return 0;
     }
     
     //checks the address is after the data offset
@@ -55,7 +83,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         temp=temp&(0xFFFFFF00);
                         temp+=(dataval>>24);
                         data[(addr-startloc)/4]=temp;
-                        
+                    
                         temp=data[((addr-startloc)/4)+1];
                         temp=temp&(0x000000FF);
                         temp+=(dataval<<8);
@@ -67,7 +95,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         temp=temp&(0xFFFF0000);
                         temp+=(dataval>>16);
                         data[addr/4]=temp;
-                        
+                    
                         temp=data[((addr-startloc)/4)+1];
                         temp=temp&(0x0000FFFF);
                         temp+=(dataval<<16);
@@ -79,7 +107,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         temp=temp&(0xFF000000);
                         temp+=(dataval>>8);
                         data[(addr-startloc)/4]=temp;
-                        
+                    
                         temp=data[((addr-startloc)/4)+1];
                         temp=temp&(0x00FFFFFF);
                         temp+=(dataval<<24);
@@ -90,7 +118,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         data[(addr-startloc)/4]=dataval;
                         break;
                 }
-            }else{
+            } else {
                 //word outside datasize
                 exit(-11);
             }
@@ -105,7 +133,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         temp=temp&(0xFFFFFF00);
                         temp+=(dataval>>8);
                         data[(addr-startloc)/4]=temp;
-                        
+                    
                         temp=data[((addr-startloc)/4)+1];
                         temp=temp&(0x00FFFFFF);
                         temp+=(dataval<<24);
@@ -189,16 +217,43 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
 }
 
 //load function for all data retrival
-int i_instruction::load(uint32_t *data, uint32_t &returndata,int datalength,uint32_t addr){
+int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int datalength,uint32_t addr){
     uint32_t temp = 0;
     int startloc = 0;
     
-    //if read addr is ADDR_GETC it returns 3
-    if(addr==0x30000000){
-        return 3;
+    //code for GETC
+    if((addr>=0x30000000)&&(addr<0x30000004)){
+        char temp = 0;
+        if(datalength==32){
+            if(addr==0x30000000){
+                cin.get(temp);
+                if(temp=='\n'){ returndata=0xFFFFFFFF; }
+                else{
+                    returndata=returndata&(0xFFFFFF00);
+                    returndata+=temp;
+                }
+            } else { exit(-11); }
+        } else if(datalength==16){
+            cin.get(temp);
+            if(temp=='\n'){ returndata=0xFFFFFFFF; }
+            else{
+                returndata=returndata&(0xFFFFFF00);
+                returndata+=temp;
+            }
+        } else if(datalength==8){
+            cin.get(temp);
+            if(temp=='\n'){ returndata=0xFFFFFFFF; }
+            else{
+                returndata=returndata&(0xFFFFFF00);
+                returndata+=temp;
+            }
+        } else { exit(-20);}
+        return 0;
     }
     
-    //checks data is not less than the offset
+    //--------------------------------------------------------------------data
+    
+    //checks data is not less than the data offset
     if(addr>=dataoffset){
         //removes the offset
         addr=-dataoffset;
@@ -340,8 +395,154 @@ int i_instruction::load(uint32_t *data, uint32_t &returndata,int datalength,uint
             exit(-20);
         }
     //error for if less than offset
+    }
+    
+    
+    //--------------------------------------------------------------------inst
+    
+    //checks data is not less than the inst offset
+    if(addr>=instoffset){
+        //removes the offset
+        addr=-instoffset;
+        
+        //works via anding the desired segment of the loaded word with 1 and all else with 0
+        //then shifts it as required and retrives the rest of the (w/hw/b) from the
+        //next word if required and data is returned in the form of changing a variable called by ref
+        
+        //startloc is the byte it begins to read from
+        startloc=addr%4;
+        
+        //word case
+        if(datalength==32){
+            //checks it is lower than the inst size boundary
+            if(((addr%4==0)&&(addr+3<instsize))||(addr+(7-addr%4)<instsize)){
+                switch(startloc){
+                    //loads the ls byte and the 3 ms bytes from the following word
+                    case 3:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x000000FF);
+                    temp=(temp<<24);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFFFFFF00);
+                    temp+=(temp>>24);
+                    returndata=temp;
+                    break;
+                    //loads the 2 ls bytes and the 2 ms bytes from the following word
+                    case 2:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x0000FFFF);
+                    temp=(temp<<16);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFFFF0000);
+                    temp+=(temp>>16);
+                    returndata=temp;
+                    break;
+                    //loads the 3 ls bytes and the ms byte from the following word
+                    case 1:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x00FFFFFF);
+                    temp=(temp<<8);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFF000000);
+                    temp+=(temp>>24);
+                    returndata=temp;
+                    break;
+                    //loads the full word
+                    case 0:
+                    returndata = inst[(addr-startloc)/4];
+                    break;
+                }
+            } else {
+                //word outside instsize
+                exit(-11);
+            }
+            //half word case
+        } else if(datalength==16){
+            //checks it is lower than the data size boundary
+            if(((addr%4==3)&&((addr+(7-addr%4))<instsize))||(addr+(3-addr%4)<instsize)){
+                switch(startloc){
+                    //loads the ls byte and the ms byte from the following word
+                    case 3:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x000000FF);
+                    temp=(temp<<8);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFF000000);
+                    temp+=(temp>>24);
+                    returndata=temp;
+                    break;
+                    //loads the 2 ls bytes
+                    case 2:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x0000FFFF);
+                    returndata=temp;
+                    break;
+                    //loads the 2nd and 3rd bytes
+                    case 1:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x00FFFF00);
+                    temp=(temp>>8);
+                    returndata=temp;
+                    break;
+                    //loads the 2 ms bytes
+                    case 0:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0xFFFF0000);
+                    temp=(temp>>16);
+                    returndata=temp;
+                    break;
+                }
+            } else {
+                //word outside instsize
+                exit(-11);
+            }
+            //byte case
+        } else if(datalength==8){
+            if((addr-(addr%4))<=instsize){
+                switch(startloc){
+                    //loads the ls byte
+                    case 3:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x000000FF);
+                    returndata = temp;
+                    break;
+                    //loads the 2nd ls byte
+                    case 2:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x0000FF00);
+                    temp=(temp>>8);
+                    returndata = temp;
+                    break;
+                    //loads the 2nd ms byte
+                    case 1:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x00FF0000);
+                    temp=(temp>>16);
+                    returndata = temp;
+                    break;
+                    //loads the ms byte
+                    case 0:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0xFF000000);
+                    temp=(temp>>24);
+                    returndata = temp;
+                    break;
+                }
+            } else {
+                //word outside instsize
+                exit(-11);
+            }
+            //only need word, half-word and byte case throw internal error if not
+        } else {
+            //has picked a different type of function (should never hit)
+            exit(-20);
+        }
     } else {
-        //word outside datasize
+        //if memory is below the inst offset
         exit(-11);
     }
     return 0;
@@ -503,7 +704,7 @@ void i_instruction::LUI(uint32_t *regs){
     }
 }
 
-int i_instruction::LB(uint32_t *regs, uint32_t *data){
+int i_instruction::LB(uint32_t *regs, uint32_t *data, uint32_t *inst){
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
     uint32_t virtaddr = simmediate + source1;
@@ -511,7 +712,7 @@ int i_instruction::LB(uint32_t *regs, uint32_t *data){
     int returnval = 0;
     
     //uses load function for accessing data
-    returnval = load(data, regvalue, 8, virtaddr);
+    returnval = load(data, inst, regvalue, 8, virtaddr);
     //if no error loads half-word into reg
     if(returnval==0){
         regs[dest]=regvalue;
@@ -524,7 +725,7 @@ int i_instruction::LB(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::LH(uint32_t *regs, uint32_t *data){
+int i_instruction::LH(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
@@ -532,7 +733,7 @@ int i_instruction::LH(uint32_t *regs, uint32_t *data){
     virtaddr = virtaddr<<2;
     
     //uses load function for accessing data
-    returnval = load(data, regvalue, 16, virtaddr);
+    returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error loads byte into reg
     if(returnval==0){
         regs[dest]=regvalue;
@@ -545,7 +746,7 @@ int i_instruction::LH(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::LWL(uint32_t *regs, uint32_t *data){
+int i_instruction::LWL(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
@@ -553,7 +754,7 @@ int i_instruction::LWL(uint32_t *regs, uint32_t *data){
     virtaddr = virtaddr<<2;
     
     //loads the left half-word
-    returnval = load(data, regvalue, 16, virtaddr);
+    returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error stores the half word in the two ms bytes
     if(returnval==0){
         regs[dest]=(regvalue<<16)+(regs[dest]&0x0000FFFF);
@@ -561,7 +762,7 @@ int i_instruction::LWL(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::LW(uint32_t *regs, uint32_t *data){
+int i_instruction::LW(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
@@ -569,7 +770,7 @@ int i_instruction::LW(uint32_t *regs, uint32_t *data){
     virtaddr = virtaddr<<2;
     
     //uses load function for accessing data
-    returnval = load(data, regvalue, 32, virtaddr);
+    returnval = load(data, inst, regvalue, 32, virtaddr);
     //if no error loads word into reg
     if(returnval==0){
         regs[dest]=regvalue;
@@ -577,7 +778,7 @@ int i_instruction::LW(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::LBU(uint32_t *regs, uint32_t *data){
+int i_instruction::LBU(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
@@ -585,7 +786,7 @@ int i_instruction::LBU(uint32_t *regs, uint32_t *data){
     virtaddr = virtaddr<<2;
     
     //uses load function for accessing data
-    returnval = load(data, regvalue, 8, virtaddr);
+    returnval = load(data, inst, regvalue, 8, virtaddr);
     //if no error loads byte into reg
     if(returnval==0){
         regs[dest]=regvalue;
@@ -593,7 +794,7 @@ int i_instruction::LBU(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::LHU(uint32_t *regs, uint32_t *data){
+int i_instruction::LHU(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
@@ -601,7 +802,7 @@ int i_instruction::LHU(uint32_t *regs, uint32_t *data){
     virtaddr = virtaddr<<2;
     
     //uses load function for accessing data
-    returnval = load(data, regvalue, 16, virtaddr);
+    returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error loads half-word into reg
     if(returnval==0){
         regs[dest]=regvalue;
@@ -609,7 +810,7 @@ int i_instruction::LHU(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::LWR(uint32_t *regs, uint32_t *data){
+int i_instruction::LWR(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
     //address is sum of signed immediate and base which is then shifted left twice
@@ -620,7 +821,7 @@ int i_instruction::LWR(uint32_t *regs, uint32_t *data){
     virtaddr -= 1;
     
     //uses load function for accessing data
-    returnval = load(data, regvalue, 16, virtaddr);
+    returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error loads half-word into reg
     if(returnval==0){
         regs[dest]=regvalue+(regs[dest]&0xFFFF0000);
@@ -673,7 +874,7 @@ int i_instruction::SW(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc){
+int i_instruction::run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc){
     int returnval = 0;
     
     //chooses function
@@ -732,25 +933,25 @@ int i_instruction::run(uint32_t *data, uint32_t *regs, uint32_t &pc, uint32_t &g
             LUI(regs);
             break;
         case 0x20:
-            returnval = LB(regs, data);
+            returnval = LB(regs, data, inst);
             break;
         case 0x21:
-            returnval = LH(regs, data);
+            returnval = LH(regs, data, inst);
             break;
         case 0x22:
-            returnval = LWL(regs, data);
+            returnval = LWL(regs, data, inst);
             break;
         case 0x23:
-            returnval = LW(regs, data);
+            returnval = LW(regs, data, inst);
             break;
         case 0x24:
-            returnval = LBU(regs, data);
+            returnval = LBU(regs, data, inst);
             break;
         case 0x25:
-            returnval = LHU(regs, data);
+            returnval = LHU(regs, data, inst);
             break;
         case 0x26:
-            returnval = LWR(regs, data);
+            returnval = LWR(regs, data, inst);
             break;
         case 0x28:
             returnval = SB(regs, data);

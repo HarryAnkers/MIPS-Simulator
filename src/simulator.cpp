@@ -11,7 +11,7 @@
 #include "j_instruction.hpp"
 #include <cmath>
 uint32_t RAM[datasize]={0};
-vector<uint32_t> ROM;
+uint32_t ROM[instsize]={0};
 
 using namespace std;
 
@@ -21,35 +21,37 @@ void make_instuction_vector(string filename){
     //NOTE -- WE TRIED U8 FOR THE BYTE BUT IT ONLY READ ONE DIGIT AT A TIME
     uint8_t instbyte=0;
     uint32_t instline=0;
+    uint32_t i=0;
     
     //declares fstream
     ifstream myfile;
     myfile.open(filename);
     
-    //needs this so it doesnt skip anything it thinks is the char equivelent to a space
+    //needs this so it doesnt skip anything it thinks is the char equivelent to a space found at
+    //https://stackoverflow.com/questions/6774825/reading-from-ifstream-wont-read-whitespace
     myfile >> noskipws;
     
     if(myfile.is_open()){
         
         //puts 32 char into the instruction vector
         while(!myfile.eof()){
+            if(i==instsize){
+                //too many instructions"
+                myfile.close();
+                exit(-11);
+            }
+            
             instline=0;
             for(int i=0; i<4; i++){
                 myfile>>instbyte;
                 instline += instbyte<<(8*(3-i));
             }
-            
             if(!myfile.eof()){
-                ROM.push_back(instline);
+                ROM[i]=instline;
             }
+            i++;
         }
         //stops at the end of the file
-        
-        if(ROM.size()>instsize){
-            //too many instructions"
-            myfile.close();
-            exit(-11);
-        }
     } else {
         //no file was opened
         exit(-12);
@@ -80,25 +82,25 @@ int main(int argc, const char * argv[])
     //converts the text file of instructions into a more managable vector of uint32 instructions
     make_instuction_vector("1st.bin");
     
-    while(done == false){
-        if(flag==0){
-            //checks the opcode and creates a class accordingly
-            char function_type='0';
-           
-            function_type = getfunc_type(ROM[0+(pc/4)]);
-            if(function_type=='r'){
-                r_instruction rinst(ROM[0+(pc/4)]);
-                rinst.run(HI, LO, regs, pc);
-            } else if(function_type=='i'){
-                i_instruction iinst(ROM[0+(pc/4)]);
-                flag = iinst.run(RAM, regs, pc, putc, getc);
-            } else if(function_type=='j'){
-                j_instruction jinst(ROM[0+(pc/4)]);
-                jinst.run(regs, pc);
-            }
+    while(1){
+        //checks the opcode and creates a class accordingly
+        char function_type='0';
+       
+        function_type = getfunc_type(ROM[0+(pc/4)]);
+        if(function_type=='r'){
+            r_instruction rinst(ROM[0+(pc/4)]);
+            rinst.run(HI, LO, regs, pc);
+        } else if(function_type=='i'){
+            i_instruction iinst(ROM[0+(pc/4)]);
+            flag = iinst.run(RAM, ROM, regs, pc, putc, getc);
+        } else if(function_type=='j'){
+            j_instruction jinst(ROM[0+(pc/4)]);
+            jinst.run(regs, pc);
         }
-        done = true;
+        
+        if (flag==-1){
+            //finishes
+            exit(regs[2]&0x000000FF);
+        }
     }
-    //program executed successfully and returned the exit code below
-    exit(regs[2]&0x000000FF);
 }

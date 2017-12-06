@@ -223,7 +223,7 @@ void r_instruction::DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO){
         //which is the subtracted from the first reg and it then performs the division
         remainder = sreg1 % sreg2;
         sreg1 -= remainder;
-        result = sreg1/regs[source2];
+        result = sreg1/sreg2;
         
         //LO recieves the result and HI receives the remainder of the operation
         LO=result;
