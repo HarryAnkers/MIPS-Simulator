@@ -58,8 +58,8 @@ public:
     uint32_t opcode;
     uint32_t source1;
     uint32_t dest;
-    uint16_t uimmediate;
-    int16_t simmediate;
+    uint32_t uimmediate;
+    int32_t simmediate;
 };
 
 

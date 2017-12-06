@@ -75,7 +75,6 @@ int main(int argc, const char * argv[])
     
     uint32_t pc=0x10000000;
     uint32_t getc, putc, HI, LO;
-    uint32_t pcno=(pc-0x10000000)/4;
     
     int flag = 0;
     
@@ -86,22 +85,24 @@ int main(int argc, const char * argv[])
         //checks the opcode and creates a class accordingly
         char function_type='0';
         
+        uint32_t pcno=(pc-0x10000000)/4;
+        
         //if pc is ADDR_NULL it returns -1
         if(pc==0){
             exit(regs[2]&0x000000FF);
-        } else if((pc<=0x10000000)||(pc>0x11000000)){
+        } else if((pc<0x10000000)||(pc>0x11000000)){
             exit(-11);
         }
        
-        function_type = getfunc_type(pcno);
+        function_type = getfunc_type(ROM[pcno]);
         if(function_type=='r'){
-            r_instruction rinst(pcno);
+            r_instruction rinst(ROM[pcno]);
             rinst.run(HI, LO, regs, pc);
         } else if(function_type=='i'){
-            i_instruction iinst(pcno);
+            i_instruction iinst(ROM[pcno]);
             flag = iinst.run(RAM, ROM, regs, pc, putc, getc);
         } else if(function_type=='j'){
-            j_instruction jinst(pcno);
+            j_instruction jinst(ROM[pcno]);
             jinst.run(regs, pc);
         }
         
