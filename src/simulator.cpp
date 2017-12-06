@@ -79,7 +79,7 @@ int main(int argc, const char * argv[])
     int flag = 0;
     
     //converts the text file of instructions into a more managable vector of uint32 instructions
-    make_instuction_vector("1st.bin");
+    make_instuction_vector(argv[1]);
     
     while(1){
         //checks the opcode and creates a class accordingly
