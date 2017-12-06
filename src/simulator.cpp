@@ -73,8 +73,9 @@ int main(int argc, const char * argv[])
     //declares the memory elements we will use except the ROM and RAM which is global
     uint32_t regs[32] = {0};
     
-    uint32_t pc=0;
+    uint32_t pc=0x10000000;
     uint32_t getc, putc, HI, LO;
+    uint32_t pcno=(pc-0x10000000)/4;
     
     int flag = 0;
     
@@ -84,16 +85,23 @@ int main(int argc, const char * argv[])
     while(1){
         //checks the opcode and creates a class accordingly
         char function_type='0';
+        
+        //if pc is ADDR_NULL it returns -1
+        if(pc==0){
+            exit(regs[2]&0x000000FF);
+        } else if((pc<=0x10000000)||(pc>0x11000000)){
+            exit(-11);
+        }
        
-        function_type = getfunc_type(ROM[0+(pc/4)]);
+        function_type = getfunc_type(pcno);
         if(function_type=='r'){
-            r_instruction rinst(ROM[0+(pc/4)]);
+            r_instruction rinst(pcno);
             rinst.run(HI, LO, regs, pc);
         } else if(function_type=='i'){
-            i_instruction iinst(ROM[0+(pc/4)]);
+            i_instruction iinst(pcno);
             flag = iinst.run(RAM, ROM, regs, pc, putc, getc);
         } else if(function_type=='j'){
-            j_instruction jinst(ROM[0+(pc/4)]);
+            j_instruction jinst(pcno);
             jinst.run(regs, pc);
         }
         

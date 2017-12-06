@@ -35,6 +35,7 @@
 		3A9D48221FBB994800C44093 /* j_instruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = j_instruction.hpp; sourceTree = "<group>"; };
 		3A9D48241FBB995A00C44093 /* i_instruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = i_instruction.cpp; sourceTree = "<group>"; };
 		3A9D48251FBB995A00C44093 /* i_instruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = i_instruction.hpp; sourceTree = "<group>"; };
+		3AA7818C1FD863D4001B6EA4 /* LUI */ = {isa = PBXFileReference; lastKnownFileType = text; name = LUI; path = "../Bin-Harry/LUI"; sourceTree = "<group>"; };
 		3AEEF8AC1FBA49FA008031D3 /* project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = project; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -60,6 +61,7 @@
 				3A9D48241FBB995A00C44093 /* i_instruction.cpp */,
 				3A9D48221FBB994800C44093 /* j_instruction.hpp */,
 				3A9D48211FBB994800C44093 /* j_instruction.cpp */,
+				3AA7818C1FD863D4001B6EA4 /* LUI */,
 				3A46ADD41FBA4A87006F4226 /* textfile.txt */,
 				3A9842941FD6DA6700DB0E52 /* 1st.bin */,
 			);

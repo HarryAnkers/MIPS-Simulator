@@ -28,18 +28,6 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
     int startloc = -1;
     uint32_t temp = 0;
     
-    //if write addr is changing only ADDR_NULL it returns -1
-    if(addr<4){
-        if(datalength==32){
-            if(addr==0){ return -1; }
-            else { exit(-11); }
-        } else if(datalength==16){
-            if(addr<3){ return -1; }
-            else { exit(-11); }
-        } else if(datalength==8){ return -1; }
-        exit(-20);
-    }
-    
     //code for PUTC
     if((addr>=0x30000004)&&(addr<0x30000008)){
         char temp = 0;
