@@ -71,7 +71,7 @@ void r_instruction::SRA(uint32_t* regs){
 
 void r_instruction::SLLV(uint32_t* regs){
     //checks inst format
-    if(dest!=0){
+    if(shift!=0){
         //-invalid instr format
         exit(-12);
     } else {
@@ -82,7 +82,7 @@ void r_instruction::SLLV(uint32_t* regs){
 
 void r_instruction::SRLV(uint32_t* regs){
     //checks inst format
-    if(dest!=0){
+    if(shift!=0){
         //-invalid instr format
         exit(-12);
     } else {
@@ -101,7 +101,7 @@ void r_instruction::SRAV(uint32_t* regs){
         //shifts the reg and adds a msb of 1 for signed numbers on loop
         for(int i=0; i<(regs[source1]&0x0000001F); i++){
             regs[dest]=regs[dest]>>1;
-            if((source2&0x80000000)!=0){
+            if((regs[source2]&0x80000000)!=0){
                 regs[dest]+=0x80000000;
             }
         }

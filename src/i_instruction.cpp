@@ -65,7 +65,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
         //word case
         if(datalength==32){
             //checks if the word (and if needed the word proceeding) is within the size
-            if(((addr%4==0)&&(addr+3<datasize))||(addr+(7-addr%4)<datasize)){
+            if(((addr%4==0)&&(addr+3<datasize))||((addr%4==0)&&(addr+(7-addr%4)<datasize))){
                 switch(startloc){
                     //ls byte and ms 3 bytes of the following word
                     case 3:
@@ -115,7 +115,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
         //half word case
         } else if(datalength==16){
             //checks if the word (and if needed the word proceeding) is within the size
-            if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||(addr+(3-addr%4)<datasize)){
+            if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||((addr%4!=3)&&(addr+(3-addr%4)<datasize))){
                 switch(startloc){
                     //ls byte and ms byte of the following word
                     case 3:
@@ -258,7 +258,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
         //word case
         if(datalength==32){
             //checks it is lower than the data size boundary
-            if(((addr%4==0)&&(addr+3<datasize))||(addr+(7-addr%4)<datasize)){
+            if(((addr%4==0)&&(addr+3<datasize))||((addr%4!=0)&&(addr+(7-addr%4)<datasize))){
                 switch(startloc){
                     //loads the ls byte and the 3 ms bytes from the following word
                     case 3:
@@ -305,7 +305,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
         //half word case
         } else if(datalength==16){
             //checks it is lower than the data size boundary
-            if(((addr%4==3)&&((addr+(7-addr%4))<datasize))||(addr+(3-addr%4)<datasize)){
+            if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||((addr%4!=3)&&(addr+(3-addr%4)<datasize))){
                 switch(startloc){
                     //loads the ls byte and the ms byte from the following word
                     case 3:
@@ -404,7 +404,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
         //word case
         if(datalength==32){
             //checks it is lower than the inst size boundary
-            if(((addr%4==0)&&(addr+3<instsize))||(addr+(7-addr%4)<instsize)){
+            if(((addr%4==0)&&(addr+3<datasize))||((addr%4!=0)&&(addr+(7-addr%4)<datasize))){
                 switch(startloc){
                     //loads the ls byte and the 3 ms bytes from the following word
                     case 3:
@@ -451,7 +451,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             //half word case
         } else if(datalength==16){
             //checks it is lower than the data size boundary
-            if(((addr%4==3)&&((addr+(7-addr%4))<instsize))||(addr+(3-addr%4)<instsize)){
+            if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||((addr%4!=3)&&(addr+(3-addr%4)<datasize))){
                 switch(startloc){
                     //loads the ls byte and the ms byte from the following word
                     case 3:
@@ -664,7 +664,7 @@ void i_instruction::SLTIU(uint32_t *regs){
 void i_instruction::ANDI(uint32_t *regs){
     uint32_t temp = uimmediate<<16;
     
-    //bitwise AND with immediate shifted left twice
+    //bitwise AND with immediate
     regs[dest]=regs[source1]&temp;
 }
 
