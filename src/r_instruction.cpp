@@ -117,6 +117,9 @@ void r_instruction::JR(uint32_t* regs, uint32_t &pc){
         //pc is set to reg value
         pc=regs[source1];
     }
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void r_instruction::JALR(uint32_t* regs, uint32_t &pc){
@@ -129,6 +132,9 @@ void r_instruction::JALR(uint32_t* regs, uint32_t &pc){
         regs[31]=pc+8;
         //pc is set to reg value
         pc=regs[source1];
+    }
+    if((pc%4)!=0){
+        exit(-11);
     }
 }
 

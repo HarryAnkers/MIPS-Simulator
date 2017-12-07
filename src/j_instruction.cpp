@@ -19,6 +19,9 @@ void j_instruction::J(uint32_t &pc){
     
     //adds the unsigned immediate to pc
     pc=pc+immediate;
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void j_instruction::JAL(uint32_t *regs, uint32_t &pc){
@@ -30,6 +33,9 @@ void j_instruction::JAL(uint32_t *regs, uint32_t &pc){
     
     //adds the unsigned immediate to pc
     pc=pc+immediate;
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void j_instruction::run(uint32_t *regs, uint32_t &pc){

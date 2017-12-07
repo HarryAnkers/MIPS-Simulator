@@ -546,6 +546,9 @@ void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc){
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
     }
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc){
@@ -556,6 +559,9 @@ void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc){
     if(temp1>=0){
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
+    }
+    if((pc%4)!=0){
+        exit(-11);
     }
 }
 
@@ -569,6 +575,9 @@ void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc){
         regs[31]=pc+8;
         pc+=temp2;
     }
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc){
@@ -581,6 +590,9 @@ void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc){
         regs[31]=pc+8;
         pc+=temp2;
     }
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void i_instruction::BEQ(uint32_t *regs, uint32_t &pc){
@@ -589,6 +601,9 @@ void i_instruction::BEQ(uint32_t *regs, uint32_t &pc){
         int32_t temp = simmediate<<2;
         pc+=temp;
     }
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void i_instruction::BNE(uint32_t *regs, uint32_t &pc){
@@ -596,6 +611,9 @@ void i_instruction::BNE(uint32_t *regs, uint32_t &pc){
     if(regs[source1]!=regs[dest]){
         int32_t temp = simmediate<<2;
         pc+=temp;
+    }
+    if((pc%4)!=0){
+        exit(-11);
     }
 }
 
@@ -608,6 +626,9 @@ void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc){
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
     }
+    if((pc%4)!=0){
+        exit(-11);
+    }
 }
 
 void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc){
@@ -618,6 +639,9 @@ void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc){
     if(temp1>0){
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
+    }
+    if((pc%4)!=0){
+        exit(-11);
     }
 }
 
