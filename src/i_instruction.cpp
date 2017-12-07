@@ -646,16 +646,18 @@ void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc){
 }
 
 void i_instruction::ADDI(uint32_t *regs){
+    int32_t temp = regs[source1];
+    int32_t totaltemp;
+    
     //total
     regs[dest]=regs[source1]+simmediate;
+    totaltemp = regs[dest];
     
     //checks if the first added number is the same sign as the immediate
-    if((regs[source1]&(0x80000000))==
-       (simmediate&(0x8000))){
-        
+    if((temp>0)==(simmediate>0)){
         //checks if the first added number is not the same sign as the total
-        if((regs[source1]&(0x80000000))!=
-           (regs[dest]&(0x80000000))){
+        if((temp>0)!=
+           (totaltemp>0)){
             //there is overflow
             exit(-10);
         }
