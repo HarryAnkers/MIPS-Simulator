@@ -17,12 +17,14 @@ void j_instruction::J(uint32_t &pc, bool &delay, uint32_t &delayinst){
     delay = true;
     delayinst = pc+4;
     
+    uint32_t temp = immediate;
+    
     //shifts pc to keep only two msb
     pc=pc>>28;
     pc=pc<<28;
     
     //adds the unsigned immediate to pc
-    pc=pc+immediate;
+    pc=pc+(temp<<2);
     if((pc%4)!=0){
         exit(-11);
     }
@@ -33,14 +35,17 @@ void j_instruction::JAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &del
     delay = true;
     delayinst = pc+4;
     
+    uint32_t temp = immediate;
+    
     //saves pc
     regs[31]=pc+8;
     
-    //shifts pc to keep only two msb    pc=pc>>28;
+    //shifts pc to keep only msbyte
+    pc=pc>>28;
     pc=pc<<28;
     
     //adds the unsigned immediate to pc
-    pc=pc+immediate;
+    pc=pc+(temp<<2);
     if((pc%4)!=0){
         exit(-11);
     }
