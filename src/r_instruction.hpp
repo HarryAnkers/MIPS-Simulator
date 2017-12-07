@@ -15,7 +15,7 @@ public:
     
     //functions to choose function and inc pc counter
     void pc_inc(uint32_t &pc);
-    void run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc );
+    void run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
     
     //all possible ops
     void SLL(uint32_t *regs);
@@ -24,8 +24,8 @@ public:
     void SLLV(uint32_t *regs);
     void SRLV(uint32_t *regs);
     void SRAV(uint32_t *regs);
-    void JR(uint32_t *regs, uint32_t &pc);
-    void JALR(uint32_t *regs, uint32_t &pc);
+    void JR(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void JALR(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
     void MFHI(uint32_t *regs, uint32_t &HI);
     void MTHI(uint32_t *regs, uint32_t &HI);
     void MFLO(uint32_t *regs, uint32_t &LO);

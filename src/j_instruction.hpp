@@ -13,11 +13,11 @@ public:
     ~j_instruction();
     
     //func to choose op
-    void run(uint32_t *regs, uint32_t &pc);
+    void run(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
     
     //only possible functions
-    void J(uint32_t &pc);
-    void JAL(uint32_t *regs, uint32_t &pc);
+    void J(uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void JAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
     
 //variables:
     uint32_t opcode;

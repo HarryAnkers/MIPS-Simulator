@@ -12,7 +12,11 @@ j_instruction::j_instruction(uint32_t instruction){
 
 j_instruction::~j_instruction(){}
 
-void j_instruction::J(uint32_t &pc){
+void j_instruction::J(uint32_t &pc, bool &delay, uint32_t &delayinst){
+    //sets the delay
+    delay = true;
+    delayinst = pc+4;
+    
     //shifts pc to keep only two msb
     pc=pc>>28;
     pc=pc<<28;
@@ -24,7 +28,11 @@ void j_instruction::J(uint32_t &pc){
     }
 }
 
-void j_instruction::JAL(uint32_t *regs, uint32_t &pc){
+void j_instruction::JAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
+    //sets the delay
+    delay = true;
+    delayinst = pc+4;
+    
     //saves pc
     regs[31]=pc+8;
     
@@ -38,12 +46,12 @@ void j_instruction::JAL(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void j_instruction::run(uint32_t *regs, uint32_t &pc){
+void j_instruction::run(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //chooses function
     if(opcode==2){
-        J(pc);
+        J(pc, delay, delayinst);
     } else if(opcode==3){
-        JAL(regs,pc);
+        JAL(regs,pc, delay, delayinst);
     } else{
         //if no func is selected returns an error (should never reach)
         exit(-12);

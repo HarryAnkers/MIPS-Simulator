@@ -75,7 +75,11 @@ int main(int argc, const char * argv[])
     uint32_t regs[32] = {0};
     
     uint32_t pc=0x10000000;
-    uint32_t getc, putc, HI, LO;
+    uint32_t getc, putc, HI, LO, pcno;
+    uint32_t pcstore = 0;
+    uint32_t delayinst = 0;
+    bool delay = false;
+    bool delaycg = false;
     
     int flag = 0;
     
@@ -86,7 +90,18 @@ int main(int argc, const char * argv[])
         //checks the opcode and creates a class accordingly
         char function_type='0';
         
-        uint32_t pcno=(pc-0x10000000)/4;
+        if(delay==false){
+            if(delaycg==true){
+                pc=pcstore;
+                delaycg=false;
+            }
+            pcno=(pc-0x10000000)/4;
+        } else {
+            pcno=(delayinst-0x10000000)/4;
+            pcstore = pc;
+            delay = false;
+            delaycg = true;
+        }
         
         //if pc is ADDR_NULL it returns -1
         if(pc==0){
@@ -98,13 +113,13 @@ int main(int argc, const char * argv[])
         function_type = getfunc_type(ROM[pcno]);
         if(function_type=='r'){
             r_instruction rinst(ROM[pcno]);
-            rinst.run(HI, LO, regs, pc);
+            rinst.run(HI, LO, regs, pc, delay, delayinst);
         } else if(function_type=='i'){
             i_instruction iinst(ROM[pcno]);
-            flag = iinst.run(RAM, ROM, regs, pc, putc, getc);
+            flag = iinst.run(RAM, ROM, regs, pc, putc, getc, delay, delayinst);
         } else if(function_type=='j'){
             j_instruction jinst(ROM[pcno]);
-            jinst.run(regs, pc);
+            jinst.run(regs, pc, delay, delayinst);
         }
         
         if (flag==-1){

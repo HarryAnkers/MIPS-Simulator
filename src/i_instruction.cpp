@@ -537,12 +537,16 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
     return 0;
 }
 
-void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc){
+void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //convert reg value to signed
     int32_t temp1 = regs[source1];
     
     //if less than it jumps the pc
     if(temp1<0){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
     }
@@ -551,12 +555,16 @@ void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc){
+void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //convert reg value to signed
     int32_t temp1 = regs[source1];
     
     //if more than or equal it jumps the pc
     if(temp1>=0){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
     }
@@ -565,12 +573,16 @@ void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc){
+void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //convert reg value to signed
     int32_t temp1 = regs[source1];
     
     //if less than it jumps the pc and saves the pc value
     if(temp1<0){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp2 = simmediate<<2;
         regs[dest]=pc+8;
         pc+=temp2;
@@ -580,12 +592,16 @@ void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc){
+void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //convert reg value to signed
     int32_t temp1 = regs[source1];
     
     //if more than or equal it jumps the pc and saves the pc value
     if(temp1>=0){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp2 = simmediate<<2;
         regs[dest]=pc+8;
         pc+=temp2;
@@ -595,9 +611,13 @@ void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BEQ(uint32_t *regs, uint32_t &pc){
+void i_instruction::BEQ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //if equal it jumps the pc
     if(regs[source1]==regs[dest]){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp = simmediate<<2;
         pc+=temp;
     }
@@ -606,9 +626,13 @@ void i_instruction::BEQ(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BNE(uint32_t *regs, uint32_t &pc){
+void i_instruction::BNE(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //if not equal it jumps the pc
     if(regs[source1]!=regs[dest]){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp = simmediate<<2;
         pc+=temp;
     }
@@ -617,12 +641,16 @@ void i_instruction::BNE(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc){
+void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //convert reg value to signed
     int32_t temp1 = regs[source1];
     
     //if less than or equal it jumps the pc
     if(temp1<=0){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
     }
@@ -631,12 +659,16 @@ void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc){
     }
 }
 
-void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc){
+void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //convert reg value to signed
     int32_t temp1 = regs[source1];
     
     //if more than it jumps the pc
     if(temp1>0){
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         int32_t temp2 = simmediate<<2;
         pc+=temp2;
     }
@@ -883,7 +915,7 @@ int i_instruction::SW(uint32_t *regs, uint32_t *data){
     return returnval;
 }
 
-int i_instruction::run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc){
+int i_instruction::run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc, bool &delay, uint32_t &delayinst){
     int returnval = 0;
     
     //chooses function
@@ -891,30 +923,30 @@ int i_instruction::run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t 
         case 0x1:
             //multiple possible for this one
             if(regs[dest]==0){
-                BLTZ(regs, pc);
+                BLTZ(regs, pc, delay, delayinst);
             } else if(regs[dest]==1){
-                BGEZ(regs, pc);
+                BGEZ(regs, pc, delay, delayinst);
             } else if(regs[dest]==16){
-                BLTZAL(regs, pc);
+                BLTZAL(regs, pc, delay, delayinst);
             } else if(regs[dest]==17){
-                BGEZAL(regs, pc);
+                BGEZAL(regs, pc, delay, delayinst);
             } //if none choose error thrown
             else { returnval = -12; }
             break;
         case 0x4:
-            BEQ(regs, pc);
+            BEQ(regs, pc, delay, delayinst);
             break;
         case 0x5:
-            BNE(regs, pc);
+            BNE(regs, pc, delay, delayinst);
             break;
         case 0x6:
             if(regs[dest]==0){
-                BLEZ(regs, pc);
+                BLEZ(regs, pc, delay, delayinst);
             } else { returnval = -12; }
             break;
         case 0x7:
             if(regs[dest]==0){
-                BGTZ(regs, pc);
+                BGTZ(regs, pc, delay, delayinst);
             } else { returnval = -12; }
             break;
         case 0x8:

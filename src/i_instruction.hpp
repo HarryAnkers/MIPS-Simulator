@@ -20,21 +20,21 @@ public:
     
     //function to inc pc and select op
     void pc_inc(uint32_t &pc);
-    int run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc);
+    int run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t &pc, uint32_t &getc, uint32_t &putc, bool &delay, uint32_t &delayinst);
     
     //seperate ops for storing and loading
     int store(uint32_t *data, uint32_t dataval, int datalength, uint32_t addr);
     int load(uint32_t *data, uint32_t *inst, uint32_t &returndata ,int datalength,uint32_t addr);
     
     //all possible ops
-    void BLTZ(uint32_t *regs, uint32_t &pc);
-    void BGEZ(uint32_t *regs, uint32_t &pc);
-    void BLTZAL(uint32_t *regs, uint32_t &pc);
-    void BGEZAL(uint32_t *regs, uint32_t &pc);
-    void BEQ(uint32_t *regs, uint32_t &pc);
-    void BNE(uint32_t *regs, uint32_t &pc);
-    void BLEZ(uint32_t *regs, uint32_t &pc);
-    void BGTZ(uint32_t *regs, uint32_t &pc);
+    void BLTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BGEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BLTZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BGEZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BEQ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BNE(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BLEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
+    void BGTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst);
     void ADDI(uint32_t *regs);
     void ADDIU(uint32_t *regs);
     void SLTI(uint32_t *regs);

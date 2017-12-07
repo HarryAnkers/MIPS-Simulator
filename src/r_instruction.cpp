@@ -108,12 +108,16 @@ void r_instruction::SRAV(uint32_t* regs){
     }
 }
 
-void r_instruction::JR(uint32_t* regs, uint32_t &pc){
+void r_instruction::JR(uint32_t* regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //checks inst format
     if(((source1!=0)&&((source2!=0)))&&(shift!=0)){
         //-invalid instr format
         exit(-12);
     } else {
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         //pc is set to reg value
         pc=regs[source1];
     }
@@ -122,12 +126,16 @@ void r_instruction::JR(uint32_t* regs, uint32_t &pc){
     }
 }
 
-void r_instruction::JALR(uint32_t* regs, uint32_t &pc){
+void r_instruction::JALR(uint32_t* regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //checks inst format
     if((source2!=0)&&(shift!=0)){
         //-invalid instr format
         exit(-12);
     } else {
+        //sets the delay
+        delay = true;
+        delayinst = pc+4;
+        
         //the pc value + a delay of 8 is stored in the return register
         regs[dest]=pc+8;
         //pc is set to reg value
@@ -403,7 +411,7 @@ void r_instruction::SLTU(uint32_t *regs){
 }
 
 //checks what function to run
-void r_instruction::run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc){
+void r_instruction::run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &delayinst){
     //by default the pc will inc
     bool pcinc = true;
     
@@ -428,11 +436,11 @@ void r_instruction::run(uint32_t &HI, uint32_t &LO, uint32_t *regs, uint32_t &pc
             SRAV(regs);
             break;
         case 0x08:
-            JR(regs, pc);
+            JR(regs, pc, delay, delayinst);
             pcinc=false;
             break;
         case 0x09:
-            JALR(regs, pc);
+            JALR(regs, pc, delay, delayinst);
             pcinc=false;
             break;
         case 0x10:
