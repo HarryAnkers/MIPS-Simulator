@@ -662,21 +662,24 @@ void i_instruction::SLTIU(uint32_t *regs){
 }
 
 void i_instruction::ANDI(uint32_t *regs){
-    uint32_t temp = uimmediate<<16;
+    uint32_t temp = uimmediate;
+    temp = temp <<16;
     
     //bitwise AND with immediate
     regs[dest]=regs[source1]&temp;
 }
 
 void i_instruction::ORI(uint32_t *regs){
-    uint32_t temp = uimmediate<<16;
+    uint32_t temp = uimmediate;
+    temp = temp <<16;
     
     //bitwise OR with immediate shifted left twice
     regs[dest]=regs[source1]|temp;
 }
 
 void i_instruction::XORI(uint32_t *regs){
-    uint32_t temp = uimmediate<<16;
+    uint32_t temp = uimmediate;
+    temp = temp <<16;
     
     //bitwise XOR with immediate shifted left twice
     regs[dest]=regs[source1]^temp;
