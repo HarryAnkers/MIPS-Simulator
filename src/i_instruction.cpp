@@ -14,7 +14,9 @@ i_instruction::i_instruction(uint32_t instruction){
     uimmediate=instruction<<16;
     uimmediate=uimmediate>>16;
     
-    simmediate=uimmediate;
+    uint16_t temp=uimmediate;
+    
+    simmediate=temp;
 }
 
 i_instruction::~i_instruction(){}
@@ -694,9 +696,9 @@ void i_instruction::LUI(uint32_t *regs){
 
 int i_instruction::LB(uint32_t *regs, uint32_t *data, uint32_t *inst){
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
+    
     int returnval = 0;
     
     //uses load function for accessing data
@@ -716,9 +718,8 @@ int i_instruction::LB(uint32_t *regs, uint32_t *data, uint32_t *inst){
 int i_instruction::LH(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 16, virtaddr);
@@ -737,9 +738,8 @@ int i_instruction::LH(uint32_t *regs, uint32_t *data, uint32_t *inst){
 int i_instruction::LWL(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //loads the left half-word
     returnval = load(data, inst, regvalue, 16, virtaddr);
@@ -753,9 +753,8 @@ int i_instruction::LWL(uint32_t *regs, uint32_t *data, uint32_t *inst){
 int i_instruction::LW(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 32, virtaddr);
@@ -769,9 +768,8 @@ int i_instruction::LW(uint32_t *regs, uint32_t *data, uint32_t *inst){
 int i_instruction::LBU(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 8, virtaddr);
@@ -785,9 +783,8 @@ int i_instruction::LBU(uint32_t *regs, uint32_t *data, uint32_t *inst){
 int i_instruction::LHU(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 16, virtaddr);
@@ -801,9 +798,8 @@ int i_instruction::LHU(uint32_t *regs, uint32_t *data, uint32_t *inst){
 int i_instruction::LWR(uint32_t *regs, uint32_t *data, uint32_t *inst){
     int returnval = 0;
     uint32_t regvalue;
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //subtracts one to start the load from one byte to the left
     virtaddr -= 1;
@@ -822,9 +818,8 @@ int i_instruction::SB(uint32_t *regs, uint32_t *data){
     //retrives ls byte and ands it to only keep the ls byte
     uint32_t regvalue = (regs[dest]&0x000000FF);
     
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses store function
     returnval = store(data, regvalue, 8, virtaddr);
@@ -837,9 +832,8 @@ int i_instruction::SH(uint32_t *regs, uint32_t *data){
     //retrives ls half-word and ands it to only keep the ls half-word
     uint32_t regvalue = (regs[dest]&0x0000FFFF);
     
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses store function
     returnval = store(data, regvalue, 16, virtaddr);
@@ -852,9 +846,8 @@ int i_instruction::SW(uint32_t *regs, uint32_t *data){
     //retrives word
     uint32_t regvalue = regs[dest];
     
-    //address is sum of signed immediate and base which is then shifted left twice
-    uint32_t virtaddr = simmediate + source1;
-    virtaddr = virtaddr<<2;
+    //address is sum of signed immediate and base regs contents
+    uint32_t virtaddr = simmediate + regs[source1];
     
     //uses store function
     returnval = store(data, regvalue, 32, virtaddr);

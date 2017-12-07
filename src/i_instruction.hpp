@@ -59,7 +59,7 @@ public:
     uint32_t source1;
     uint32_t dest;
     uint32_t uimmediate;
-    int32_t simmediate;
+    int16_t simmediate;
 };
 
 

@@ -35,40 +35,7 @@
 		3A9D48241FBB995A00C44093 /* i_instruction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = i_instruction.cpp; sourceTree = "<group>"; };
 		3A9D48251FBB995A00C44093 /* i_instruction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = i_instruction.hpp; sourceTree = "<group>"; };
 		3AEEF8AC1FBA49FA008031D3 /* project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = project; sourceTree = BUILT_PRODUCTS_DIR; };
-		3AFE6B9B1FD95834001B88D3 /* SUB3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SUB3.txt; path = "../Bin-Harry/SUB3.txt"; sourceTree = "<group>"; };
-		3AFE6B9C1FD95835001B88D3 /* ADDU1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ADDU1.txt; path = "../Bin-Harry/ADDU1.txt"; sourceTree = "<group>"; };
-		3AFE6B9D1FD95835001B88D3 /* JR4.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = JR4.txt; path = "../Bin-Harry/JR4.txt"; sourceTree = "<group>"; };
-		3AFE6B9E1FD95835001B88D3 /* SUBU1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SUBU1.txt; path = "../Bin-Harry/SUBU1.txt"; sourceTree = "<group>"; };
-		3AFE6B9F1FD95835001B88D3 /* SRL2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRL2.txt; path = "../Bin-Harry/SRL2.txt"; sourceTree = "<group>"; };
-		3AFE6BA01FD95835001B88D3 /* SRL3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRL3.txt; path = "../Bin-Harry/SRL3.txt"; sourceTree = "<group>"; };
-		3AFE6BA11FD95835001B88D3 /* SUB2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SUB2.txt; path = "../Bin-Harry/SUB2.txt"; sourceTree = "<group>"; };
-		3AFE6BA21FD95835001B88D3 /* SLL2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SLL2.txt; path = "../Bin-Harry/SLL2.txt"; sourceTree = "<group>"; };
-		3AFE6BA31FD95835001B88D3 /* SUB1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SUB1.txt; path = "../Bin-Harry/SUB1.txt"; sourceTree = "<group>"; };
-		3AFE6BA41FD95835001B88D3 /* ADD1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ADD1.txt; path = "../Bin-Harry/ADD1.txt"; sourceTree = "<group>"; };
-		3AFE6BA51FD95835001B88D3 /* ADD3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ADD3.txt; path = "../Bin-Harry/ADD3.txt"; sourceTree = "<group>"; };
-		3AFE6BA61FD95835001B88D3 /* ADD2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ADD2.txt; path = "../Bin-Harry/ADD2.txt"; sourceTree = "<group>"; };
-		3AFE6BA71FD95835001B88D3 /* JR1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = JR1.txt; path = "../Bin-Harry/JR1.txt"; sourceTree = "<group>"; };
-		3AFE6BA81FD95836001B88D3 /* SRA1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRA1.txt; path = "../Bin-Harry/SRA1.txt"; sourceTree = "<group>"; };
-		3AFE6BA91FD95836001B88D3 /* LUI2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LUI2.txt; path = "../Bin-Harry/LUI2.txt"; sourceTree = "<group>"; };
-		3AFE6BAA1FD95836001B88D3 /* SRL1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRL1.txt; path = "../Bin-Harry/SRL1.txt"; sourceTree = "<group>"; };
-		3AFE6BAC1FD95836001B88D3 /* ADDU2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ADDU2.txt; path = "../Bin-Harry/ADDU2.txt"; sourceTree = "<group>"; };
-		3AFE6BAD1FD95836001B88D3 /* JR2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = JR2.txt; path = "../Bin-Harry/JR2.txt"; sourceTree = "<group>"; };
-		3AFE6BAE1FD95836001B88D3 /* LUI1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LUI1.txt; path = "../Bin-Harry/LUI1.txt"; sourceTree = "<group>"; };
-		3AFE6BAF1FD95836001B88D3 /* SLL1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SLL1.txt; path = "../Bin-Harry/SLL1.txt"; sourceTree = "<group>"; };
-		3AFE6BB01FD95837001B88D3 /* ADD4.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = ADD4.txt; path = "../Bin-Harry/ADD4.txt"; sourceTree = "<group>"; };
-		3AFE6BB11FD95837001B88D3 /* SUBU2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SUBU2.txt; path = "../Bin-Harry/SUBU2.txt"; sourceTree = "<group>"; };
-		3AFE6BB21FD95837001B88D3 /* JR3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = JR3.txt; path = "../Bin-Harry/JR3.txt"; sourceTree = "<group>"; };
-		3AFE6BB31FD95837001B88D3 /* SUB4.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SUB4.txt; path = "../Bin-Harry/SUB4.txt"; sourceTree = "<group>"; };
-		3AFE6BB41FD95837001B88D3 /* SRA2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRA2.txt; path = "../Bin-Harry/SRA2.txt"; sourceTree = "<group>"; };
-		3AFE6BB51FD95837001B88D3 /* SRA3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRA3.txt; path = "../Bin-Harry/SRA3.txt"; sourceTree = "<group>"; };
-		3AFE6BBE1FD95912001B88D3 /* SRLV2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRLV2.txt; path = "../Bin-Harry/SRLV2.txt"; sourceTree = "<group>"; };
-		3AFE6BBF1FD95912001B88D3 /* SLLV1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SLLV1.txt; path = "../Bin-Harry/SLLV1.txt"; sourceTree = "<group>"; };
-		3AFE6BC01FD95912001B88D3 /* SRLV3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRLV3.txt; path = "../Bin-Harry/SRLV3.txt"; sourceTree = "<group>"; };
-		3AFE6BC11FD95912001B88D3 /* SRLV1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRLV1.txt; path = "../Bin-Harry/SRLV1.txt"; sourceTree = "<group>"; };
-		3AFE6BC21FD95912001B88D3 /* SRAV1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRAV1.txt; path = "../Bin-Harry/SRAV1.txt"; sourceTree = "<group>"; };
-		3AFE6BC31FD95913001B88D3 /* SLLV2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SLLV2.txt; path = "../Bin-Harry/SLLV2.txt"; sourceTree = "<group>"; };
-		3AFE6BC41FD95913001B88D3 /* SRAV3.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRAV3.txt; path = "../Bin-Harry/SRAV3.txt"; sourceTree = "<group>"; };
-		3AFE6BC51FD95913001B88D3 /* SRAV2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = SRAV2.txt; path = "../Bin-Harry/SRAV2.txt"; sourceTree = "<group>"; };
+		3AFE6BC61FD95F5D001B88D3 /* Bin-Harry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Bin-Harry"; path = "../Bin-Harry"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,47 +49,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3A7CB63B1FD87343008BE51A /* BIN TXT files */ = {
-			isa = PBXGroup;
-			children = (
-				3AFE6BA41FD95835001B88D3 /* ADD1.txt */,
-				3AFE6BA61FD95835001B88D3 /* ADD2.txt */,
-				3AFE6BA51FD95835001B88D3 /* ADD3.txt */,
-				3AFE6BB01FD95837001B88D3 /* ADD4.txt */,
-				3AFE6B9C1FD95835001B88D3 /* ADDU1.txt */,
-				3AFE6BAC1FD95836001B88D3 /* ADDU2.txt */,
-				3AFE6BA71FD95835001B88D3 /* JR1.txt */,
-				3AFE6BAD1FD95836001B88D3 /* JR2.txt */,
-				3AFE6BB21FD95837001B88D3 /* JR3.txt */,
-				3AFE6B9D1FD95835001B88D3 /* JR4.txt */,
-				3AFE6BAE1FD95836001B88D3 /* LUI1.txt */,
-				3AFE6BA91FD95836001B88D3 /* LUI2.txt */,
-				3AFE6BAF1FD95836001B88D3 /* SLL1.txt */,
-				3AFE6BA21FD95835001B88D3 /* SLL2.txt */,
-				3AFE6BA81FD95836001B88D3 /* SRA1.txt */,
-				3AFE6BB41FD95837001B88D3 /* SRA2.txt */,
-				3AFE6BB51FD95837001B88D3 /* SRA3.txt */,
-				3AFE6BAA1FD95836001B88D3 /* SRL1.txt */,
-				3AFE6B9F1FD95835001B88D3 /* SRL2.txt */,
-				3AFE6BA01FD95835001B88D3 /* SRL3.txt */,
-				3AFE6BA31FD95835001B88D3 /* SUB1.txt */,
-				3AFE6BA11FD95835001B88D3 /* SUB2.txt */,
-				3AFE6B9B1FD95834001B88D3 /* SUB3.txt */,
-				3AFE6BB31FD95837001B88D3 /* SUB4.txt */,
-				3AFE6B9E1FD95835001B88D3 /* SUBU1.txt */,
-				3AFE6BB11FD95837001B88D3 /* SUBU2.txt */,
-				3AFE6BBF1FD95912001B88D3 /* SLLV1.txt */,
-				3AFE6BC31FD95913001B88D3 /* SLLV2.txt */,
-				3AFE6BC21FD95912001B88D3 /* SRAV1.txt */,
-				3AFE6BC51FD95913001B88D3 /* SRAV2.txt */,
-				3AFE6BC41FD95913001B88D3 /* SRAV3.txt */,
-				3AFE6BC11FD95912001B88D3 /* SRLV1.txt */,
-				3AFE6BBE1FD95912001B88D3 /* SRLV2.txt */,
-				3AFE6BC01FD95912001B88D3 /* SRLV3.txt */,
-			);
-			name = "BIN TXT files";
-			sourceTree = "<group>";
-		};
 		3AEEF8A31FBA49FA008031D3 = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +61,7 @@
 				3A9D48221FBB994800C44093 /* j_instruction.hpp */,
 				3A9D48211FBB994800C44093 /* j_instruction.cpp */,
 				3A9842941FD6DA6700DB0E52 /* 1st.bin */,
-				3A7CB63B1FD87343008BE51A /* BIN TXT files */,
+				3AFE6BC61FD95F5D001B88D3 /* Bin-Harry */,
 			);
 			sourceTree = "<group>";
 		};
