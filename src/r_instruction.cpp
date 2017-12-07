@@ -271,13 +271,13 @@ void r_instruction::ADD(uint32_t *regs){
         stotal = regs[dest];
         
         //checks for overflow
-        if((sreg1>0)==(sreg2>0)){
+        if((sreg1>0)&&(sreg2>0)){
             if(stotal<0){
                 //overflow occured
                 exit(-10);
             }
         }
-        if((sreg1<0)==(sreg2<0)){
+        if((sreg1<0)&&(sreg2<0)){
             if(stotal>0){
                 //overflow occured
                 exit(-10);

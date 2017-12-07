@@ -158,7 +158,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
         //byte case
         } else if(datalength==8){
             //checks within data size
-            if((addr-(addr%4))<=datasize){
+            if((addr-(addr%4))<datasize){
                 switch(startloc){
                     //ls byte
                     case 3:
@@ -345,7 +345,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             }
         //byte case
         } else if(datalength==8){
-            if((addr-(addr%4))<=datasize){
+            if((addr-(addr%4))<datasize){
                 switch(startloc){
                     //loads the ls byte
                     case 3:
@@ -491,7 +491,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             }
             //byte case
         } else if(datalength==8){
-            if((addr-(addr%4))<=instsize){
+            if((addr-(addr%4))<instsize){
                 switch(startloc){
                     //loads the ls byte
                     case 3:
