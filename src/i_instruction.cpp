@@ -54,7 +54,7 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
     //checks the address is after the data offset
     if(addr>=dataoffset){
         //removes offset
-        addr=-dataoffset;
+        addr-=dataoffset;
         
         //all the following works via anding the segment of the word that will be stored with 0
         //it then shifts the word, half word or byte accordingly and adds it
@@ -246,7 +246,7 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
     //checks data is not less than the data offset
     if(addr>=dataoffset){
         //removes the offset
-        addr=-dataoffset;
+        addr-=dataoffset;
         
         //works via anding the desired segment of the loaded word with 1 and all else with 0
         //then shifts it as required and retrives the rest of the (w/hw/b) from the
@@ -384,16 +384,15 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             //has picked a different type of function (should never hit)
             exit(-20);
         }
-    //error for if less than offset
     }
     
     
     //--------------------------------------------------------------------inst
     
     //checks data is not less than the inst offset
-    if(addr>=instoffset){
+    else if(addr>=instoffset){
         //removes the offset
-        addr=-instoffset;
+        addr-=instoffset;
         
         //works via anding the desired segment of the loaded word with 1 and all else with 0
         //then shifts it as required and retrives the rest of the (w/hw/b) from the
