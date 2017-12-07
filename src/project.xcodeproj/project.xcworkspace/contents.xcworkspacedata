@@ -2,60 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../Bin-Harry/SUB4.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SUB3.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SUB2.txt">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/harrisonankers/Documents/project/Bin-Harry/SUB1.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/ADD4.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/ADD3.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/ADD2.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/ADD.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/JR4.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/JR3">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SUBU3.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../SUBU2">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SUBU1.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SRA3">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SRA2.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SRA1.txt">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SLL2">
-   </FileRef>
-   <FileRef
-      location = "group:../../Bin-Harry/SLL2.txt">
-   </FileRef>
-   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>

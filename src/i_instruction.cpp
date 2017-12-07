@@ -572,7 +572,7 @@ void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc){
     //if less than it jumps the pc and saves the pc value
     if(temp1<0){
         int32_t temp2 = simmediate<<2;
-        regs[31]=pc+8;
+        regs[dest]=pc+8;
         pc+=temp2;
     }
     if((pc%4)!=0){
@@ -587,7 +587,7 @@ void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc){
     //if more than or equal it jumps the pc and saves the pc value
     if(temp1>=0){
         int32_t temp2 = simmediate<<2;
-        regs[31]=pc+8;
+        regs[dest]=pc+8;
         pc+=temp2;
     }
     if((pc%4)!=0){

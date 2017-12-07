@@ -110,7 +110,7 @@ void r_instruction::SRAV(uint32_t* regs){
 
 void r_instruction::JR(uint32_t* regs, uint32_t &pc){
     //checks inst format
-    if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
+    if(((source1!=0)&&((source2!=0)))&&(shift!=0)){
         //-invalid instr format
         exit(-12);
     } else {
@@ -124,12 +124,12 @@ void r_instruction::JR(uint32_t* regs, uint32_t &pc){
 
 void r_instruction::JALR(uint32_t* regs, uint32_t &pc){
     //checks inst format
-    if(((source1!=0)&&((source1!=0)))&&(shift!=0)){
+    if((source2!=0)&&(shift!=0)){
         //-invalid instr format
         exit(-12);
     } else {
         //the pc value + a delay of 8 is stored in the return register
-        regs[31]=pc+8;
+        regs[dest]=pc+8;
         //pc is set to reg value
         pc=regs[source1];
     }
