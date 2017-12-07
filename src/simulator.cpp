@@ -90,7 +90,7 @@ int main(int argc, const char * argv[])
         //if pc is ADDR_NULL it returns -1
         if(pc==0){
             exit(regs[2]&0x000000FF);
-        } else if((pc<0x10000000)||(pc>0x11000000)){
+        } else if((pc<0x10000000)||(pc>=0x11000000)){
             exit(-11);
         }
        

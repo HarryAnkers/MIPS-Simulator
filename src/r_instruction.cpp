@@ -58,10 +58,11 @@ void r_instruction::SRA(uint32_t* regs){
         //-invalid instr format
         exit(-12);
     } else {
+        regs[dest]=regs[source2];
         //shifts the reg and adds a msb of 1 for signed numbers on loop
         for(int i=0; i<shift; i++){
-            regs[dest]=regs[source2]>>1;
-            if((source2&0x80000000)!=0){
+            regs[dest]=regs[dest]>>1;
+            if((regs[source2]&0x80000000)!=0){
                 regs[dest]+=0x80000000;
             }
         }
@@ -75,7 +76,7 @@ void r_instruction::SLLV(uint32_t* regs){
         exit(-12);
     } else {
         //shifts the reg and stores it
-        regs[dest]=regs[source2]<<regs[source1];
+        regs[dest]=regs[source2]<<(regs[source1]&0x0000001F);
     }
 }
 
@@ -86,7 +87,7 @@ void r_instruction::SRLV(uint32_t* regs){
         exit(-12);
     } else {
         //shifts the reg and stores it
-        regs[dest]=regs[source2]>>regs[source1];
+        regs[dest]=regs[source2]>>(regs[source1]&0x0000001F);
     }
 }
 
@@ -96,9 +97,10 @@ void r_instruction::SRAV(uint32_t* regs){
         //-invalid instr format
         exit(-12);
     } else {
+        regs[dest]=regs[source2];
         //shifts the reg and adds a msb of 1 for signed numbers on loop
-        for(int i=0; i<regs[source1]; i++){
-            regs[dest]=regs[source2]>>1;
+        for(int i=0; i<(regs[source1]&0x0000001F); i++){
+            regs[dest]=regs[dest]>>1;
             if((source2&0x80000000)!=0){
                 regs[dest]+=0x80000000;
             }
@@ -310,10 +312,11 @@ void r_instruction::SUB(uint32_t *regs){
         //performs subtraction
         regs[dest]=sreg1-sreg2;
         sresult=regs[dest];
-    
+        
         //checks for overflow
-        if((sreg1>0)!=(sreg2<0)){
-            if(sresult<0){
+        if((sreg1>0)!=(sreg2>0)){
+            if(((sreg1>0)&&sresult<0)||
+               ((sreg1<0)&&sresult>0)){
                 //overflow occured
                 exit(-10);
             }

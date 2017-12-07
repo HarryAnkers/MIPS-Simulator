@@ -1,0 +1,6 @@
+JR $ra
+
+should just terminate
+
+03E00008
+
