@@ -414,7 +414,8 @@ void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate*4;
+        int32_t temp2 = simmediate;
+        temp2 = temp2*4;
         pc+=temp2;
     }
     if((pc%4)!=0){
@@ -432,8 +433,9 @@ void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate*4;
-        pc+=temp2;
+        int32_t temp = simmediate;
+        temp = temp*4;
+        pc+=temp;
     }
     if((pc%4)!=0){
         exit(-11);
@@ -450,9 +452,10 @@ void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate*4;
+        int32_t temp = (int32_t)simmediate;
+        temp = temp*4;
         regs[31]=pc+8;
-        pc+=temp2;
+        pc+=temp;
     }
     if((pc%4)!=0){
         exit(-11);
@@ -469,9 +472,10 @@ void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate*4;
+        int32_t temp2 = (int32_t)simmediate;
+        temp2 = temp2*4;
         regs[31]=pc+8;
-        pc+=temp2;
+        pc=pc+temp2;
     }
     if((pc%4)!=0){
         exit(-11);
@@ -485,7 +489,8 @@ void i_instruction::BEQ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &del
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp = simmediate*4;
+        int32_t temp = (int32_t)simmediate;
+        temp = temp*4;
         pc+=temp;
     }
     if((pc%4)!=0){
@@ -500,7 +505,8 @@ void i_instruction::BNE(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &del
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp = simmediate*4;
+        int32_t temp = (int32_t)simmediate;
+        temp = temp*4;
         pc+=temp;
     }
     if((pc%4)!=0){
@@ -518,8 +524,9 @@ void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate*4;
-        pc+=temp2;
+        int32_t temp = (int32_t)simmediate;
+        temp = temp*4;
+        pc+=temp;
     }
     if((pc%4)!=0){
         exit(-11);
@@ -536,8 +543,9 @@ void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate*4;
-        pc+=temp2;
+        int32_t temp = (int32_t)simmediate;
+        temp = temp*4;
+        pc+=temp;
     }
     if((pc%4)!=0){
         exit(-11);
@@ -549,7 +557,7 @@ void i_instruction::ADDI(uint32_t *regs){
     int32_t totaltemp;
     
     //total
-    regs[dest]=regs[source1]+simmediate;
+    regs[dest]=regs[source1]+(int32_t)simmediate;
     totaltemp = regs[dest];
     
     //checks if the first added number is the same sign as the immediate
@@ -591,6 +599,7 @@ void i_instruction::ANDI(uint32_t *regs){
     temp = temp <<16;
     
     //bitwise AND with immediate
+    cout<<(regs[source1]&temp)<<endl;
     regs[dest]=regs[source1]&temp;
 }
 
@@ -835,12 +844,12 @@ int i_instruction::run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t 
             BNE(regs, pc, delay, delayinst);
             break;
         case 0x6:
-            if(regs[dest]==0){
+            if(dest==0){
                 BLEZ(regs, pc, delay, delayinst);
             } else { returnval = -12; }
             break;
         case 0x7:
-            if(regs[dest]==0){
+            if(dest==0){
                 BGTZ(regs, pc, delay, delayinst);
             } else { returnval = -12; }
             break;
