@@ -584,7 +584,7 @@ void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &
         delayinst = pc+4;
         
         int32_t temp2 = simmediate*4;
-        regs[dest]=pc+8;
+        regs[31]=pc+8;
         pc+=temp2;
     }
     if((pc%4)!=0){
@@ -603,7 +603,7 @@ void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &
         delayinst = pc+4;
         
         int32_t temp2 = simmediate*4;
-        regs[dest]=pc+8;
+        regs[31]=pc+8;
         pc+=temp2;
     }
     if((pc%4)!=0){

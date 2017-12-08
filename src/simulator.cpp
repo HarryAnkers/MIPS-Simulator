@@ -70,9 +70,13 @@ char getfunc_type(uint32_t instruction){
 
 int main(int argc, const char * argv[])
 {
+    uint32_t t1=0x80000000;
+    uint32_t t2=0xFFFFFFFF;
+    int32_t s1=t1;
+    int32_t s2=t2;
+    int32_t t3=t1/t2;
     
 //declares the memory elements we will use except the ROM and RAM which is global
-    
     uint32_t regs[32] = {0};
     
     uint32_t pc=0x10000000;

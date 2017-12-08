@@ -137,7 +137,7 @@ void r_instruction::JALR(uint32_t* regs, uint32_t &pc, bool &delay, uint32_t &de
         delayinst = pc+4;
         
         //the pc value + a delay of 8 is stored in the return register
-        regs[dest]=pc+8;
+        regs[31]=pc+8;
         //pc is set to reg value
         pc=regs[source1];
     }
@@ -195,7 +195,13 @@ void r_instruction::MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     if((dest==0)&&(shift==0)){
         //converts the registers to signed variables and multiplies them into a 64b variable
         int64_t sreg1 = regs[source1];
+        if(regs[source1]&0x80000000){
+            sreg1=sreg1|0xFFFFFFFF00000000;
+        }
         int64_t sreg2 = regs[source2];
+        if(regs[source2]&0x80000000){
+            sreg2=sreg2|0xFFFFFFFF00000000;
+        }
         int64_t result = sreg1 * sreg2;
         
         //LO receives the least significant 32b of the 64b total and HI recieves the most significant 32b
@@ -227,23 +233,31 @@ void r_instruction::MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
 
 void r_instruction::DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
-    if(((dest==0)&&(shift==0))||(regs[source2]!=0)){
-        int32_t result, sreg1, sreg2;
-        uint32_t remainder = 0;
-        
-        //converts the registers to signed variables
-        sreg1 = regs[source1];
-        sreg2 = regs[source2];
-        
-        //remainder gets the remainder of the divison,
-        //which is the subtracted from the first reg and it then performs the division
-        remainder = sreg1 % sreg2;
-        sreg1 -= remainder;
-        result = sreg1/sreg2;
-        
-        //LO recieves the result and HI receives the remainder of the operation
-        LO=result;
-        HI=remainder;
+    if((dest==0)&&(shift==0)){
+        if(regs[source2]==0){
+            HI=0;
+            LO=0;
+        } else if ((regs[source1]==0xFFFFFFFF)&&(regs[source2]==0x80000000)) {
+            HI=0;
+            LO=0;
+        } else {
+            int32_t result, sreg1, sreg2;
+            uint32_t remainder = 0;
+            
+            //converts the registers to signed variables
+            sreg1 = regs[source1];
+            sreg2 = regs[source2];
+            
+            //remainder gets the remainder of the divison,
+            //which is the subtracted from the first reg and it then performs the division
+            remainder = sreg1 % sreg2;
+            sreg1 -= remainder;
+            result = sreg1/sreg2;
+            
+            //LO recieves the result and HI receives the remainder of the operation
+            LO=result;
+            HI=remainder;
+        }
     } else {
         //-invalid instr format
         exit(-12);
@@ -251,8 +265,12 @@ void r_instruction::DIV(uint32_t *regs, uint32_t &HI, uint32_t &LO){
 }
 
 void r_instruction::DIVU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
+    if(regs[source2]==0){
+        HI=0;
+        LO=0;
+    } else
     //checks inst format
-    if(((dest==0)&&(shift==0))||(regs[source2]!=0)){
+    if((dest==0)&&(shift==0)){
         uint32_t result, remainder, temp;
         
         //remainder gets the remainder of the divison,
