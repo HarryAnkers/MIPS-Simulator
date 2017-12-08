@@ -35,17 +35,18 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
         char temp = 0;
         if(datalength==32){
             if(addr==0x30000004){
-                temp = datalength&0x000000FF;
+                temp = dataval&0x000000FF;
                 cout<<temp;
             } else { exit(-11); }
         } else if(datalength==16){
             if(addr==0x30000006){
-                temp = datalength&0x000000FF;
+                temp = dataval&0x000000FF;
                 cout<<temp;
             } else { exit(-11); }
         } else if(datalength==8){
             if(addr==0x30000007){
-                temp = datalength&0x000000FF;
+                temp = dataval&0x000000FF;
+                cout<<temp;
             } else { exit(-11); }
         } else { exit(-20);}
         return 0;

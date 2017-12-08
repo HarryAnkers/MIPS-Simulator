@@ -7,6 +7,7 @@ LB $v0 0x03 $t0
 
 JR $ra
 
+should get char
 
 3C083000
 3C090000

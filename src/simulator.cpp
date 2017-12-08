@@ -70,12 +70,6 @@ char getfunc_type(uint32_t instruction){
 
 int main(int argc, const char * argv[])
 {
-    /*uint8_t a = 0;
-    uint16_t b = 0;
-    
-    cin >> a;
-    b=a;
-    cout << b << endl;*/
     
 //declares the memory elements we will use except the ROM and RAM which is global
     uint32_t regs[32] = {0};
