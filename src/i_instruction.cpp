@@ -547,7 +547,7 @@ void i_instruction::BLTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate<<2;
+        int32_t temp2 = simmediate*4;
         pc+=temp2;
     }
     if((pc%4)!=0){
@@ -565,7 +565,7 @@ void i_instruction::BGEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate<<2;
+        int32_t temp2 = simmediate*4;
         pc+=temp2;
     }
     if((pc%4)!=0){
@@ -583,7 +583,7 @@ void i_instruction::BLTZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate<<2;
+        int32_t temp2 = simmediate*4;
         regs[dest]=pc+8;
         pc+=temp2;
     }
@@ -602,7 +602,7 @@ void i_instruction::BGEZAL(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate<<2;
+        int32_t temp2 = simmediate*4;
         regs[dest]=pc+8;
         pc+=temp2;
     }
@@ -618,7 +618,7 @@ void i_instruction::BEQ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &del
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp = simmediate<<2;
+        int32_t temp = simmediate*4;
         pc+=temp;
     }
     if((pc%4)!=0){
@@ -633,7 +633,7 @@ void i_instruction::BNE(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &del
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp = simmediate<<2;
+        int32_t temp = simmediate*4;
         pc+=temp;
     }
     if((pc%4)!=0){
@@ -651,7 +651,7 @@ void i_instruction::BLEZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate<<2;
+        int32_t temp2 = simmediate*4;
         pc+=temp2;
     }
     if((pc%4)!=0){
@@ -669,7 +669,7 @@ void i_instruction::BGTZ(uint32_t *regs, uint32_t &pc, bool &delay, uint32_t &de
         delay = true;
         delayinst = pc+4;
         
-        int32_t temp2 = simmediate<<2;
+        int32_t temp2 = simmediate*4;
         pc+=temp2;
     }
     if((pc%4)!=0){

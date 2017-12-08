@@ -8,7 +8,7 @@ MFHI $v0
 
 JR $ra
 
-Just testing if it works output 0
+Just testing if it works output 255
 
 3C08FFFF
 00084402
