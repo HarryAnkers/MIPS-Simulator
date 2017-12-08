@@ -1,0 +1,28 @@
+LUI $t0 0X8000
+
+LUI $t1 0X000D
+SRL $v0 $t1 0x10
+
+BGEZAL $t0 0x18
+
+SLL $v0 $v1 0x08
+JR $zero
+ADDU $zero $zero $zero
+ADDU $zero $zero $zero
+ADDU $zero $zero $zero
+JR $ra
+
+
+should return 0xD0 208
+
+3C088000
+3C09000D
+00091402
+05110018
+00031200
+00000008
+00000021
+00000021
+00000021
+03E00008
+00000021

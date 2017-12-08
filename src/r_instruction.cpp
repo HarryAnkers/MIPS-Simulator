@@ -218,8 +218,9 @@ void r_instruction::MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if((dest==0)&&(shift==0)){
         //performs multiplication
-        uint64_t tempmulti = regs[source1];
-        uint64_t result = tempmulti * regs[source2];
+        uint64_t tempmulti1 = regs[source1];
+        uint64_t tempmulti2 = regs[source2];
+        uint64_t result = tempmulti1*tempmulti2;
         
         //LO receives the least significant 32b of the 64b total and HI recieves the most significant 32b
         LO = result&0xFFFFFFFF;
@@ -326,7 +327,12 @@ void r_instruction::ADDU(uint32_t *regs){
         exit(-12);
     } else {
         //performs addition
-        regs[dest]=regs[source1]+regs[source2];
+        uint32_t temp1=regs[source1];
+        uint32_t temp2=regs[source2];
+        uint32_t temp3=0;
+        
+        temp3=temp1+temp2;
+        regs[dest]=temp3;
     }
 }
 
@@ -343,8 +349,8 @@ void r_instruction::SUB(uint32_t *regs){
         int32_t sresult;
     
         //performs subtraction
-        regs[dest]=sreg1-sreg2;
-        sresult=regs[dest];
+        sresult=sreg1-sreg2;
+        regs[dest]=sresult;
         
         //checks for overflow
         if((sreg1>0)!=(sreg2>0)){
@@ -364,7 +370,12 @@ void r_instruction::SUBU(uint32_t *regs){
         exit(-12);
     }else{
         //performs subtraction
-        regs[dest]=regs[source1]-regs[source2];
+        uint32_t temp1=regs[source1];
+        uint32_t temp2=regs[source2];
+        uint32_t temp3=0;
+        
+        temp3=temp1-temp2;
+        regs[dest]=temp3;
     }
 }
 
@@ -375,7 +386,12 @@ void r_instruction::AND(uint32_t *regs){
         exit(-12);
     } else {
         //bitwise and
-        regs[dest]=regs[source1]&regs[source2];
+        uint32_t temp1=regs[source1];
+        uint32_t temp2=regs[source2];
+        uint32_t temp3=0;
+        
+        temp3=temp1&temp2;
+        regs[dest]=temp3;
     }
 }
 
@@ -386,7 +402,12 @@ void r_instruction::OR(uint32_t *regs){
         exit(-12);
     } else {
         //bitwise or
-        regs[dest]=regs[source1]|regs[source2];
+        uint32_t temp1=regs[source1];
+        uint32_t temp2=regs[source2];
+        uint32_t temp3=0;
+        
+        temp3=temp1|temp2;
+        regs[dest]=temp3;
     }
 }
 
@@ -397,7 +418,12 @@ void r_instruction::XOR(uint32_t *regs){
         exit(-12);
     } else {
         //bitwise xor
-        regs[dest]=regs[source1]^regs[source2];
+        uint32_t temp1=regs[source1];
+        uint32_t temp2=regs[source2];
+        uint32_t temp3=0;
+        
+        temp3=temp1^temp2;
+        regs[dest]=temp3;
     }
 }
 

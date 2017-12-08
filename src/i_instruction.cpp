@@ -817,13 +817,13 @@ int i_instruction::run(uint32_t *data, uint32_t *inst, uint32_t *regs, uint32_t 
     switch(opcode){
         case 0x1:
             //multiple possible for this one
-            if(regs[dest]==0){
+            if(dest==0){
                 BLTZ(regs, pc, delay, delayinst);
-            } else if(regs[dest]==1){
+            } else if(dest==1){
                 BGEZ(regs, pc, delay, delayinst);
-            } else if(regs[dest]==16){
+            } else if(dest==16){
                 BLTZAL(regs, pc, delay, delayinst);
-            } else if(regs[dest]==17){
+            } else if(dest==17){
                 BGEZAL(regs, pc, delay, delayinst);
             } //if none choose error thrown
             else { returnval = -12; }
