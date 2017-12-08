@@ -67,11 +67,46 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
             //checks if the word (and if needed the word proceeding) is within the size
             if(((addr%4==0)&&(addr+3<datasize))||((addr%4==0)&&(addr+(7-addr%4)<datasize))){
                 switch(startloc){
+                    //ls byte and ms 3 bytes of the following word
+                    case 3:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0xFFFFFF00);
+                        temp+=(dataval>>24);
+                        data[(addr-startloc)/4]=temp;
+                    
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0x000000FF);
+                        temp+=(dataval<<8);
+                        data[((addr-startloc)/4)+1]=temp;
+                        break;
+                    //ls 2 bytes and ms 2 bytes of the following word
+                    case 2:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0xFFFF0000);
+                        temp+=(dataval>>16);
+                        data[addr/4]=temp;
+                    
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0x0000FFFF);
+                        temp+=(dataval<<16);
+                        data[((addr-startloc)/4)+1]=temp;
+                        break;
+                    //ls 3 bytes and ms byte of the following word
+                    case 1:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0xFF000000);
+                        temp+=(dataval>>8);
+                        data[(addr-startloc)/4]=temp;
+                    
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0x00FFFFFF);
+                        temp+=(dataval<<24);
+                        data[((addr-startloc)/4)+1]=temp;
+                        break;
+                    //the full word
                     case 0:
                         data[(addr-startloc)/4]=dataval;
                         break;
-                    default:
-                        exit(-11);
                 }
             } else {
                 //word outside datasize
@@ -82,12 +117,31 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
             //checks if the word (and if needed the word proceeding) is within the size
             if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||((addr%4!=3)&&(addr+(3-addr%4)<datasize))){
                 switch(startloc){
+                    //ls byte and ms byte of the following word
+                    case 3:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0xFFFFFF00);
+                        temp+=(dataval>>8);
+                        data[(addr-startloc)/4]=temp;
+                    
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0x00FFFFFF);
+                        temp+=(dataval<<24);
+                        data[((addr-startloc)/4)+1]=temp;
+                        break;
                     //ls 2 bytes
                     case 2:
                         temp=data[(addr-startloc)/4];
                         temp=temp&(0xFFFF0000);
                         temp+=dataval;
                         data[addr/4]=temp;
+                        break;
+                    //2nd and 3rd bytes
+                    case 1:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0xFF0000FF);
+                        temp+=(dataval<<8);
+                        data[(addr-startloc)/4]=temp;
                         break;
                     //ms 2 bytes
                     case 0:
@@ -96,8 +150,6 @@ int i_instruction::store(uint32_t *data, uint32_t dataval ,int datalength,uint32
                         temp+=(dataval<<16);
                         data[(addr-startloc)/4]=temp;
                         break;
-                    default:
-                        exit(-11);
                 }
             }else{
                 //word outside datasize
@@ -165,10 +217,6 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
         if(datalength==32){
             if(addr==0x30000000){
                 cin.get(temp);
-                
-                cin.clear();
-                cin.ignore(10000,'\n');
-                
                 if(temp=='\n'){ returndata=0xFFFFFFFF; }
                 else{
                     returndata=returndata&(0xFFFFFF00);
@@ -177,10 +225,6 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             } else { exit(-11); }
         } else if(datalength==16){
             cin.get(temp);
-            
-            cin.clear();
-            cin.ignore(10000,'\n');
-            
             if(temp=='\n'){ returndata=0xFFFFFFFF; }
             else{
                 returndata=returndata&(0xFFFFFF00);
@@ -188,10 +232,6 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             }
         } else if(datalength==8){
             cin.get(temp);
-            
-            cin.clear();
-            cin.ignore(10000,'\n');
-            
             if(temp=='\n'){ returndata=0xFFFFFFFF; }
             else{
                 returndata=returndata&(0xFFFFFF00);
@@ -220,12 +260,43 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             //checks it is lower than the data size boundary
             if(((addr%4==0)&&(addr+3<datasize))||((addr%4!=0)&&(addr+(7-addr%4)<datasize))){
                 switch(startloc){
+                    //loads the ls byte and the 3 ms bytes from the following word
+                    case 3:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0x000000FF);
+                        temp=(temp<<24);
+                        
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0xFFFFFF00);
+                        temp+=(temp>>24);
+                        returndata=temp;
+                        break;
+                    //loads the 2 ls bytes and the 2 ms bytes from the following word
+                    case 2:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0x0000FFFF);
+                        temp=(temp<<16);
+                        
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0xFFFF0000);
+                        temp+=(temp>>16);
+                        returndata=temp;
+                        break;
+                    //loads the 3 ls bytes and the ms byte from the following word
+                    case 1:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0x00FFFFFF);
+                        temp=(temp<<8);
+                        
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0xFF000000);
+                        temp+=(temp>>24);
+                        returndata=temp;
+                        break;
                     //loads the full word
                     case 0:
                         returndata = data[(addr-startloc)/4];
                         break;
-                    default:
-                        exit(-11);
                 }
             } else {
                 //word outside datasize
@@ -236,10 +307,28 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             //checks it is lower than the data size boundary
             if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||((addr%4!=3)&&(addr+(3-addr%4)<datasize))){
                 switch(startloc){
+                    //loads the ls byte and the ms byte from the following word
+                    case 3:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0x000000FF);
+                        temp=(temp<<8);
+                        
+                        temp=data[((addr-startloc)/4)+1];
+                        temp=temp&(0xFF000000);
+                        temp+=(temp>>24);
+                        returndata=temp;
+                        break;
                     //loads the 2 ls bytes
                     case 2:
                         temp=data[(addr-startloc)/4];
                         temp=temp&(0x0000FFFF);
+                        returndata=temp;
+                        break;
+                    //loads the 2nd and 3rd bytes
+                    case 1:
+                        temp=data[(addr-startloc)/4];
+                        temp=temp&(0x00FFFF00);
+                        temp=(temp>>8);
                         returndata=temp;
                         break;
                     //loads the 2 ms bytes
@@ -249,8 +338,6 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
                         temp=(temp>>16);
                         returndata=temp;
                         break;
-                    default:
-                        exit(-11);
                 }
             } else {
                 //word outside datasize
@@ -319,12 +406,43 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             //checks it is lower than the inst size boundary
             if(((addr%4==0)&&(addr+3<datasize))||((addr%4!=0)&&(addr+(7-addr%4)<datasize))){
                 switch(startloc){
+                    //loads the ls byte and the 3 ms bytes from the following word
+                    case 3:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x000000FF);
+                    temp=(temp<<24);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFFFFFF00);
+                    temp+=(temp>>24);
+                    returndata=temp;
+                    break;
+                    //loads the 2 ls bytes and the 2 ms bytes from the following word
+                    case 2:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x0000FFFF);
+                    temp=(temp<<16);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFFFF0000);
+                    temp+=(temp>>16);
+                    returndata=temp;
+                    break;
+                    //loads the 3 ls bytes and the ms byte from the following word
+                    case 1:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x00FFFFFF);
+                    temp=(temp<<8);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFF000000);
+                    temp+=(temp>>24);
+                    returndata=temp;
+                    break;
                     //loads the full word
                     case 0:
-                        returndata = inst[(addr-startloc)/4];
-                        break;
-                    default:
-                        exit(-11);
+                    returndata = inst[(addr-startloc)/4];
+                    break;
                 }
             } else {
                 //word outside instsize
@@ -335,21 +453,37 @@ int i_instruction::load(uint32_t *data, uint32_t *inst, uint32_t &returndata,int
             //checks it is lower than the data size boundary
             if(((addr%4==3)&&(addr+(7-addr%4)<datasize))||((addr%4!=3)&&(addr+(3-addr%4)<datasize))){
                 switch(startloc){
+                    //loads the ls byte and the ms byte from the following word
+                    case 3:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x000000FF);
+                    temp=(temp<<8);
+                    
+                    temp=inst[((addr-startloc)/4)+1];
+                    temp=temp&(0xFF000000);
+                    temp+=(temp>>24);
+                    returndata=temp;
+                    break;
                     //loads the 2 ls bytes
                     case 2:
-                        temp=inst[(addr-startloc)/4];
-                        temp=temp&(0x0000FFFF);
-                        returndata=temp;
-                        break;
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x0000FFFF);
+                    returndata=temp;
+                    break;
+                    //loads the 2nd and 3rd bytes
+                    case 1:
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0x00FFFF00);
+                    temp=(temp>>8);
+                    returndata=temp;
+                    break;
                     //loads the 2 ms bytes
                     case 0:
-                        temp=inst[(addr-startloc)/4];
-                        temp=temp&(0xFFFF0000);
-                        temp=(temp>>16);
-                        returndata=temp;
-                        break;
-                    default:
-                        exit(-11);
+                    temp=inst[(addr-startloc)/4];
+                    temp=temp&(0xFFFF0000);
+                    temp=(temp>>16);
+                    returndata=temp;
+                    break;
                 }
             } else {
                 //word outside instsize
