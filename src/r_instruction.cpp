@@ -194,14 +194,14 @@ void r_instruction::MULT(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if((dest==0)&&(shift==0)){
         //converts the registers to signed variables and multiplies them into a 64b variable
-        int32_t sreg1 = regs[source1];
-        int32_t sreg2 = regs[source2];
+        int64_t sreg1 = regs[source1];
+        int64_t sreg2 = regs[source2];
         int64_t result = sreg1 * sreg2;
         
         //LO receives the least significant 32b of the 64b total and HI recieves the most significant 32b
-        LO = result;
+        LO = result&0xFFFFFFFF;
         result = result>>32;
-        HI = result;
+        HI = result&0xFFFFFFFF;
     } else {
         //-invalid instr format
         exit(-12);
@@ -212,12 +212,13 @@ void r_instruction::MULTU(uint32_t *regs, uint32_t &HI, uint32_t &LO){
     //checks inst format
     if((dest==0)&&(shift==0)){
         //performs multiplication
-        uint64_t result = regs[source1] * regs[source2];
+        uint64_t tempmulti = regs[source1];
+        uint64_t result = tempmulti * regs[source2];
         
         //LO receives the least significant 32b of the 64b total and HI recieves the most significant 32b
-        LO = result;
+        LO = result&0xFFFFFFFF;
         result = result>>32;
-        HI = result;
+        HI = result&0xFFFFFFFF;
     } else {
         //-invalid instr format
         exit(-12);

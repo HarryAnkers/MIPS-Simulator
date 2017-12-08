@@ -72,6 +72,7 @@ int main(int argc, const char * argv[])
 {
     
 //declares the memory elements we will use except the ROM and RAM which is global
+    
     uint32_t regs[32] = {0};
     
     uint32_t pc=0x10000000;
