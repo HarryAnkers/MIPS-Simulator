@@ -59,6 +59,7 @@ void make_instuction_vector(string filename){
     myfile.close();
 }
 
+
 char getfunc_type(uint32_t instruction){
     int opcode=instruction>>26;
     

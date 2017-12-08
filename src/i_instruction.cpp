@@ -648,6 +648,10 @@ int i_instruction::LH(uint32_t *regs, uint32_t *data, uint32_t *inst){
     //address is sum of signed immediate and base regs contents
     uint32_t virtaddr = simmediate + regs[source1];
     
+    if(virtaddr%2!=0){
+        exit(-11);
+    }
+    
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error loads byte into reg
@@ -668,6 +672,10 @@ int i_instruction::LWL(uint32_t *regs, uint32_t *data, uint32_t *inst){
     //address is sum of signed immediate and base regs contents
     uint32_t virtaddr = simmediate + regs[source1];
     
+    if(virtaddr%2!=0){
+        exit(-11);
+    }
+    
     //loads the left half-word
     returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error stores the half word in the two ms bytes
@@ -682,6 +690,10 @@ int i_instruction::LW(uint32_t *regs, uint32_t *data, uint32_t *inst){
     uint32_t regvalue;
     //address is sum of signed immediate and base regs contents
     uint32_t virtaddr = simmediate + regs[source1];
+    
+    if(virtaddr%4!=0){
+        exit(-11);
+    }
     
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 32, virtaddr);
@@ -713,6 +725,10 @@ int i_instruction::LHU(uint32_t *regs, uint32_t *data, uint32_t *inst){
     //address is sum of signed immediate and base regs contents
     uint32_t virtaddr = simmediate + regs[source1];
     
+    if(virtaddr%2!=0){
+        exit(-11);
+    }
+    
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 16, virtaddr);
     //if no error loads half-word into reg
@@ -730,6 +746,10 @@ int i_instruction::LWR(uint32_t *regs, uint32_t *data, uint32_t *inst){
     
     //subtracts one to start the load from one byte to the left
     virtaddr -= 1;
+    
+    if(virtaddr%2!=0){
+        exit(-11);
+    }
     
     //uses load function for accessing data
     returnval = load(data, inst, regvalue, 16, virtaddr);
@@ -762,6 +782,10 @@ int i_instruction::SH(uint32_t *regs, uint32_t *data){
     //address is sum of signed immediate and base regs contents
     uint32_t virtaddr = simmediate + regs[source1];
     
+    if(virtaddr%2!=0){
+        exit(-11);
+    }
+    
     //uses store function
     returnval = store(data, regvalue, 16, virtaddr);
     
@@ -775,6 +799,10 @@ int i_instruction::SW(uint32_t *regs, uint32_t *data){
     
     //address is sum of signed immediate and base regs contents
     uint32_t virtaddr = simmediate + regs[source1];
+    
+    if(virtaddr%4!=0){
+        exit(-11);
+    }
     
     //uses store function
     returnval = store(data, regvalue, 32, virtaddr);
